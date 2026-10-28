@@ -83,6 +83,9 @@
     .music-row { display:flex; align-items:center; gap:18px; max-width:560px; margin:auto; }
     .music-disc { flex:0 0 68px; width:68px; height:68px; border-radius:50%; border:1px solid var(--gold); display:grid; place-items:center; color:var(--gold); background:radial-gradient(circle,#6f203c 0 22%,#170d14 24% 100%); }
     .music-copy { flex:1; }
+    .music-copy a { color:var(--gold); }
+    .music-player { max-width:560px; margin:22px auto 0; aspect-ratio:16/9; border:1px solid var(--line); border-radius:18px; overflow:hidden; background:#000; }
+    .music-player iframe { width:100%; height:100%; border:0; display:block; }
     .music-copy strong { display:block; font-weight:normal; font-size:20px; }
     .music-copy span { color:var(--muted); font:12px Arial,sans-serif; }
     footer { padding:35px 0 45px; text-align:center; color:#9f8590; font:11px Arial,sans-serif; }
@@ -180,17 +183,20 @@
     <section id="musica">
       <div class="wrap">
         <div class="section-head">
-          <div class="eyebrow">A trilha sonora fica para depois</div>
-          <h2>Uma música para nós</h2>
-          <p>A música ainda não foi escolhida — e tudo bem. Este espaço já está preparado para recebê-la quando você decidir.</p>
+          <div class="eyebrow">A trilha sonora do nosso cantinho</div>
+          <h2>Nossa música</h2>
+          <p>Aperte o play e deixe tocar enquanto você relembra.</p>
         </div>
         <div class="panel music-row">
           <div class="music-disc">♫</div>
           <div class="music-copy">
-            <strong>Nossa música especial</strong>
-            <span>Escolheremos juntas, no momento certo.</span>
+            <strong>Nossa música</strong>
+            <span><a href="https://youtu.be/m6TXPNybrmk" target="_blank" rel="noopener">Abrir no YouTube ↗</a></span>
           </div>
           <span style="color:var(--gold);font-size:22px" aria-hidden="true">♪</span>
+        </div>
+        <div class="music-player">
+          <iframe src="https://www.youtube-nocookie.com/embed/m6TXPNybrmk" title="Nossa música" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
       </div>
     </section>
