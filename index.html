@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#100b10">
+  <title>Para sempre nós ✦</title>
+  <style>
+    :root {
+      --bg: #100b10;
+      --panel: rgba(35, 17, 28, .82);
+      --wine: #6f203c;
+      --wine-light: #a34b68;
+      --gold: #e8c78b;
+      --cream: #f7edf0;
+      --muted: #c6adb7;
+      --line: rgba(232, 199, 139, .25);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; color: var(--cream);
+      background:
+        radial-gradient(ellipse at 18% 12%, rgba(111,32,60,.35), transparent 38%),
+        radial-gradient(ellipse at 85% 38%, rgba(116,75,39,.13), transparent 34%),
+        var(--bg);
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.6;
+    }
+    body::before {
+      content: ""; position: fixed; inset: 0; pointer-events: none; z-index: -1;
+      background-image: radial-gradient(circle, rgba(255,220,160,.75) 1px, transparent 2px);
+      background-size: 137px 151px; opacity: .12;
+      mask-image: linear-gradient(to bottom, black, transparent 80%);
+    }
+    a { color: inherit; }
+    .wrap { width: min(1080px, 91%); margin: auto; }
+    .nav { display:flex; justify-content:space-between; align-items:center; padding: 22px 0; gap:16px; }
+    .brand { color: var(--gold); letter-spacing:.16em; text-transform:uppercase; font: 11px/1.4 Arial,sans-serif; }
+    .nav a { color:var(--muted); text-decoration:none; font:12px Arial,sans-serif; }
+    .hero { min-height: 76vh; display:grid; place-items:center; text-align:center; padding: 55px 0 70px; position:relative; }
+    .glow { width: 250px; height: 250px; position:absolute; border-radius:50%; background:rgba(156,54,85,.16); filter:blur(55px); top:20%; }
+    .eyebrow { color:var(--gold); text-transform:uppercase; letter-spacing:.25em; font:11px Arial,sans-serif; }
+    h1 { font-size:clamp(48px, 9vw, 94px); line-height:1.02; font-weight:normal; margin:20px 0; }
+    h1 span { color:var(--gold); font-style:italic; }
+    .intro { max-width:570px; margin:0 auto 28px; color:#d9c5cd; font-size:18px; }
+    .button { display:inline-block; border:1px solid var(--line); padding:12px 20px; border-radius:999px; text-decoration:none; color:var(--gold); font:12px Arial,sans-serif; letter-spacing:.08em; transition:.2s; background:rgba(30,14,23,.5); cursor:pointer; }
+    .button:hover { background:rgba(111,32,60,.45); transform:translateY(-2px); }
+    section { padding:62px 0; }
+    .section-head { text-align:center; margin-bottom:28px; }
+    h2 { font-size:clamp(30px,5vw,45px); font-weight:normal; margin:8px 0 12px; }
+    .section-head p { color:var(--muted); max-width:600px; margin:auto; }
+    .panel { background:var(--panel); border:1px solid var(--line); border-radius:24px; padding:clamp(22px,5vw,42px); box-shadow:0 18px 70px rgba(0,0,0,.18); }
+    .date-label { color:var(--gold); text-transform:uppercase; letter-spacing:.12em; font:11px Arial,sans-serif; text-align:center; }
+    .date-big { text-align:center; font-size:clamp(27px,5vw,42px); margin:8px 0 4px; }
+    .time-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; max-width:700px; margin:25px auto 8px; }
+    .time { text-align:center; border:1px solid rgba(232,199,139,.18); background:rgba(0,0,0,.17); border-radius:15px; padding:18px 8px; }
+    .time strong { display:block; color:var(--gold); font-size:clamp(25px,5vw,40px); font-weight:normal; }
+    .time span { font:10px Arial,sans-serif; letter-spacing:.13em; color:var(--muted); }
+    .subnote { text-align:center; color:var(--muted); font-size:13px; margin-top:16px; }
+    .letter { max-width:720px; margin:auto; text-align:center; }
+    .letter p { color:#e3d3da; font-size:18px; }
+    .letter .sign { color:var(--gold); font-style:italic; font-size:23px; margin-top:25px; }
+    .envelope-area { text-align:center; }
+    .envelope {
+      margin:20px auto; width:min(310px,85vw); height:190px; position:relative; border:1px solid rgba(232,199,139,.55);
+      background:linear-gradient(145deg,#61213a,#2a101e); border-radius:9px; display:grid; place-items:center; cursor:pointer;
+      box-shadow:0 15px 45px rgba(0,0,0,.3); transition:transform .25s;
+    }
+    .envelope:hover { transform:translateY(-4px); }
+    .envelope:before { content:""; position:absolute; inset:0; background:linear-gradient(32deg,transparent 49.5%,rgba(232,199,139,.25) 50%,transparent 50.7%),linear-gradient(-32deg,transparent 49.5%,rgba(232,199,139,.25) 50%,transparent 50.7%); border-radius:9px; }
+    .seal { width:49px; height:49px; border-radius:50%; background:var(--gold); color:#351522; display:grid; place-items:center; font-size:22px; z-index:1; box-shadow:0 0 25px rgba(232,199,139,.25); }
+    .envelope-hint { color:var(--muted); font:12px Arial,sans-serif; }
+    .letter-content { display:none; margin:25px auto 0; max-width:680px; text-align:left; }
+    .letter-content.open { display:block; animation:appear .6s ease; }
+    @keyframes appear { from {opacity:0;transform:translateY(10px)} to {opacity:1;transform:translateY(0)} }
+    .gallery { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    .photo-slot { aspect-ratio:4/5; border:1px dashed rgba(232,199,139,.38); border-radius:17px; background:linear-gradient(145deg,rgba(111,32,60,.25),rgba(255,255,255,.015)); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:18px; color:var(--muted); overflow:hidden; }
+    .photo-slot .symbol { font-size:28px; color:var(--gold); margin-bottom:8px; }
+    .photo-slot small { font:11px/1.5 Arial,sans-serif; }
+    .music-row { display:flex; align-items:center; gap:18px; max-width:560px; margin:auto; }
+    .music-disc { flex:0 0 68px; width:68px; height:68px; border-radius:50%; border:1px solid var(--gold); display:grid; place-items:center; color:var(--gold); background:radial-gradient(circle,#6f203c 0 22%,#170d14 24% 100%); }
+    .music-copy { flex:1; }
+    .music-copy strong { display:block; font-weight:normal; font-size:20px; }
+    .music-copy span { color:var(--muted); font:12px Arial,sans-serif; }
+    footer { padding:35px 0 45px; text-align:center; color:#9f8590; font:11px Arial,sans-serif; }
+    footer .heart { color:var(--wine-light); font-size:17px; }
+    @media(max-width:620px) {
+      .nav { align-items:flex-start; } .nav a { max-width:130px; text-align:right; line-height:1.5; }
+      .hero { min-height:70vh; } .intro { font-size:16px; }
+      .time-grid { grid-template-columns:repeat(2,1fr); }
+      .gallery { grid-template-columns:1fr; }
+      .photo-slot { aspect-ratio:16/9; }
+      .music-row { align-items:flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap nav">
+    <div class="brand">Um lugar só nosso ✦</div>
+    <a href="#carta">Uma carta para você ↓</a>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <div class="glow"></div>
+      <div>
+        <div class="eyebrow">Para Karolzinha</div>
+        <h1>Para sempre<br><span>nós.</span></h1>
+        <p class="intro">Algumas pessoas deixam a vida mais bonita simplesmente por fazerem parte dela. Este cantinho é uma pequena homenagem à nossa amizade.</p>
+        <a class="button" href="#data">Nossa data especial ✦</a>
+      </div>
+    </section>
+
+    <section id="data">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Um dia que merece ser lembrado</div>
+          <h2>Desde aquele dia</h2>
+          <p>Uma data especial, guardada com carinho. Que venham muitas outras lembranças para somar a essa história.</p>
+        </div>
+        <div class="panel">
+          <div class="date-label">Nossa data especial</div>
+          <div class="date-big">6 de setembro de 2021</div>
+          <div class="time-grid" aria-live="polite">
+            <div class="time"><strong id="years">—</strong><span>ANOS</span></div>
+            <div class="time"><strong id="months">—</strong><span>MESES</span></div>
+            <div class="time"><strong id="days">—</strong><span>DIAS</span></div>
+            <div class="time"><strong id="hours">—</strong><span>HORAS</span></div>
+          </div>
+          <p class="subnote" id="date-note">Tempo desde 6 de setembro de 2021.</p>
+          <p class="subnote" id="anniversary-note"></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="carta">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Com carinho, para você</div>
+          <h2>Uma cartinha</h2>
+          <p>Tem coisas que merecem ser ditas com calma — e guardadas com carinho.</p>
+        </div>
+        <div class="panel envelope-area">
+          <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Abrir carta" aria-expanded="false">
+            <div class="seal">♥</div>
+          </div>
+          <div class="envelope-hint" id="envelope-hint">Toque no envelope para abrir sua carta</div>
+          <article class="letter-content panel" id="letter-content">
+            <div class="letter">
+              <p>Karolzinha,</p>
+              <p>Criei este cantinho para guardar um pedacinho do carinho que tenho por você. Às vezes, a correria da vida não deixa a gente falar tudo o que sente, então fica aqui esse lembrete: sua amizade é especial e merece ser celebrada.</p>
+              <p>Que a gente continue colecionando conversas, risadas, histórias e aqueles momentos simples que acabam se tornando os mais importantes. Que nunca faltem motivos para torcer uma pela outra, matar a saudade e lembrar do quanto é bom ter alguém querido por perto.</p>
+              <p>Este site ainda vai ganhar fotos, músicas e lembranças nossas — porque a nossa história é feita por nós, e cada detalhe merece ser verdadeiro.</p>
+              <p>Com muito carinho, hoje e sempre. ♥</p>
+              <div class="sign">Para sempre nós.</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="memorias">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Pequenos pedaços da nossa história</div>
+          <h2>Nossas memórias</h2>
+          <p>Espaço reservado para as fotos reais de vocês. Nenhuma lembrança foi inventada.</p>
+        </div>
+        <div class="gallery">
+          <div class="photo-slot"><div class="symbol">✦</div><strong>Uma foto especial</strong><small>Substitua este espaço por uma foto de vocês.</small></div>
+          <div class="photo-slot"><div class="symbol">♡</div><strong>Um momento querido</strong><small>Adicione uma lembrança que tenha significado para vocês.</small></div>
+          <div class="photo-slot"><div class="symbol">✧</div><strong>Mais uma memória</strong><small>Este espaço fica à espera da próxima foto.</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="musica">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">A trilha sonora fica para depois</div>
+          <h2>Uma música para nós</h2>
+          <p>A música ainda não foi escolhida — e tudo bem. Este espaço já está preparado para recebê-la quando você decidir.</p>
+        </div>
+        <div class="panel music-row">
+          <div class="music-disc">♫</div>
+          <div class="music-copy">
+            <strong>Nossa música especial</strong>
+            <span>Escolheremos juntas, no momento certo.</span>
+          </div>
+          <span style="color:var(--gold);font-size:22px" aria-hidden="true">♪</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Feito com carinho para Karolzinha <div class="heart">♥</div>
+    <div>Um cantinho para celebrar a amizade.</div>
+  </footer>
+
+  <script>
+    // Data fornecida: 6 de setembro de 2021.
+    const specialDate = new Date(2021, 8, 6, 0, 0, 0);
+    const nextAnniversary = () => {
+      const now = new Date();
+      let next = new Date(now.getFullYear(), 8, 6, 0, 0, 0);
+      if (next <= now) next = new Date(now.getFullYear() + 1, 8, 6, 0, 0, 0);
+      return next;
+    };
+    function updateTime() {
+      const now = new Date();
+      let years = now.getFullYear() - specialDate.getFullYear();
+      let anniversary = new Date(specialDate.getFullYear() + years, 8, 6);
+      if (anniversary > now) years--;
+      let cursor = new Date(specialDate.getFullYear() + years, 8, 6);
+      let months = 0;
+      while (months < 11) {
+        const candidate = new Date(cursor);
+        candidate.setMonth(candidate.getMonth() + 1);
+        if (candidate <= now) { cursor = candidate; months++; } else break;
+      }
+      const diff = Math.max(0, now - cursor);
+      const days = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      document.getElementById('years').textContent = years;
+      document.getElementById('months').textContent = months;
+      document.getElementById('days').textContent = days;
+      document.getElementById('hours').textContent = hours;
+      const next = nextAnniversary();
+      const daysToGo = Math.ceil((next - now) / 86400000);
+      document.getElementById('anniversary-note').textContent =
+        `Faltam ${daysToGo} dia(s) para o próximo 6 de setembro.`;
+    }
+    updateTime();
+    setInterval(updateTime, 60000);
+
+    const envelope = document.getElementById('envelope');
+    const letter = document.getElementById('letter-content');
+    const hint = document.getElementById('envelope-hint');
+    function toggleLetter() {
+      const isOpen = letter.classList.toggle('open');
+      envelope.setAttribute('aria-expanded', String(isOpen));
+      hint.textContent = isOpen ? 'Sua cartinha está aberta ♥' : 'Toque no envelope para abrir sua carta';
+      if (isOpen) letter.scrollIntoView({behavior:'smooth', block:'nearest'});
+    }
+    envelope.addEventListener('click', toggleLetter);
+    envelope.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleLetter(); }
+    });
+  </script>
+</body>
+</html>
