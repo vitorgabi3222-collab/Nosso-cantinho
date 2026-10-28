@@ -74,10 +74,10 @@
     .letter-content { display:none; margin:25px auto 0; max-width:680px; text-align:left; }
     .letter-content.open { display:block; animation:appear .6s ease; }
     @keyframes appear { from {opacity:0;transform:translateY(10px)} to {opacity:1;transform:translateY(0)} }
-    .gallery { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    .gallery { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
     .photo-slot { aspect-ratio:4/5; border:1px dashed rgba(232,199,139,.38); border-radius:17px; background:linear-gradient(145deg,rgba(111,32,60,.25),rgba(255,255,255,.015)); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:18px; color:var(--muted); overflow:hidden; }
     .photo-slot.has-media { padding:0; border-style:solid; background:#000; }
-    .photo-slot video { width:100%; height:100%; object-fit:cover; display:block; }
+    .photo-slot video, .photo-slot img { width:100%; height:100%; object-fit:cover; display:block; }
     .photo-slot .symbol { font-size:28px; color:var(--gold); margin-bottom:8px; }
     .photo-slot small { font:11px/1.5 Arial,sans-serif; }
     .music-row { display:flex; align-items:center; gap:18px; max-width:560px; margin:auto; }
@@ -91,8 +91,7 @@
       .nav { align-items:flex-start; } .nav a { max-width:130px; text-align:right; line-height:1.5; }
       .hero { min-height:70vh; } .intro { font-size:16px; }
       .time-grid { grid-template-columns:repeat(2,1fr); }
-      .gallery { grid-template-columns:1fr; }
-      .photo-slot { aspect-ratio:16/9; }
+      .gallery { grid-template-columns:repeat(2,1fr); gap:10px; }
       .music-row { align-items:flex-start; }
     }
   </style>
@@ -172,7 +171,8 @@
         <div class="gallery">
           <div class="photo-slot has-media"><video controls playsinline preload="metadata" poster="media/memoria-1.jpg" src="media/memoria-1.mp4"></video></div>
           <div class="photo-slot has-media"><video controls playsinline preload="metadata" poster="media/memoria-2.jpg" src="media/memoria-2.mp4"></video></div>
-          <div class="photo-slot"><div class="symbol">✧</div><strong>Mais uma memória</strong><small>Este espaço fica à espera da próxima foto.</small></div>
+          <div class="photo-slot has-media"><img src="media/memoria-3.jpg" alt="Foto de vocês no campo de girassóis" loading="lazy"></div>
+          <div class="photo-slot has-media"><img src="media/memoria-4.jpg" alt="Foto de vocês em preto e branco" loading="lazy"></div>
         </div>
       </div>
     </section>
