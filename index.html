@@ -76,6 +76,8 @@
     @keyframes appear { from {opacity:0;transform:translateY(10px)} to {opacity:1;transform:translateY(0)} }
     .gallery { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
     .photo-slot { aspect-ratio:4/5; border:1px dashed rgba(232,199,139,.38); border-radius:17px; background:linear-gradient(145deg,rgba(111,32,60,.25),rgba(255,255,255,.015)); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:18px; color:var(--muted); overflow:hidden; }
+    .photo-slot.has-media { padding:0; border-style:solid; background:#000; }
+    .photo-slot video { width:100%; height:100%; object-fit:cover; display:block; }
     .photo-slot .symbol { font-size:28px; color:var(--gold); margin-bottom:8px; }
     .photo-slot small { font:11px/1.5 Arial,sans-serif; }
     .music-row { display:flex; align-items:center; gap:18px; max-width:560px; margin:auto; }
@@ -168,8 +170,8 @@
           <p>Espaço reservado para as fotos reais de vocês. Nenhuma lembrança foi inventada.</p>
         </div>
         <div class="gallery">
-          <div class="photo-slot"><div class="symbol">✦</div><strong>Uma foto especial</strong><small>Substitua este espaço por uma foto de vocês.</small></div>
-          <div class="photo-slot"><div class="symbol">♡</div><strong>Um momento querido</strong><small>Adicione uma lembrança que tenha significado para vocês.</small></div>
+          <div class="photo-slot has-media"><video controls playsinline preload="metadata" poster="media/memoria-1.jpg" src="media/memoria-1.mp4"></video></div>
+          <div class="photo-slot has-media"><video controls playsinline preload="metadata" poster="media/memoria-2.jpg" src="media/memoria-2.mp4"></video></div>
           <div class="photo-slot"><div class="symbol">✧</div><strong>Mais uma memória</strong><small>Este espaço fica à espera da próxima foto.</small></div>
         </div>
       </div>
