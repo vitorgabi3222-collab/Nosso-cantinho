@@ -83,6 +83,14 @@
     .music-row { display:flex; align-items:center; gap:18px; max-width:560px; margin:auto; }
     .music-disc { flex:0 0 68px; width:68px; height:68px; border-radius:50%; border:1px solid var(--gold); display:grid; place-items:center; color:var(--gold); background:radial-gradient(circle,#6f203c 0 22%,#170d14 24% 100%); }
     .music-copy { flex:1; }
+    .intro-gate { position:fixed; inset:0; z-index:100; display:grid; place-items:center; text-align:center; padding:24px;
+      background:radial-gradient(ellipse at 50% 35%, rgba(111,32,60,.55), transparent 55%), var(--bg); transition:opacity .6s ease, visibility .6s; }
+    .intro-gate.hide { opacity:0; visibility:hidden; pointer-events:none; }
+    .intro-gate h2 { font-size:clamp(34px,8vw,64px); margin:14px 0 26px; }
+    .intro-gate .button { font-size:14px; padding:15px 30px; color:var(--gold); }
+    .music-toggle { position:fixed; right:max(16px,env(safe-area-inset-right,0px)); bottom:max(16px,env(safe-area-inset-bottom,0px)); z-index:50;
+      width:48px; height:48px; border-radius:50%; border:1px solid var(--line); background:rgba(30,14,23,.85); color:var(--gold); font-size:20px; cursor:pointer; display:none; place-items:center; }
+    .music-toggle.on { display:grid; }
     .music-copy a { color:var(--gold); }
     .music-player { max-width:560px; margin:22px auto 0; aspect-ratio:16/9; border:1px solid var(--line); border-radius:18px; overflow:hidden; background:#000; }
     .music-player iframe { width:100%; height:100%; border:0; display:block; }
@@ -100,6 +108,14 @@
   </style>
 </head>
 <body>
+  <div class="intro-gate" id="intro-gate" role="dialog" aria-label="Entrada">
+    <div>
+      <div class="eyebrow">Um lugar só nosso ✦</div>
+      <h2>Para sempre <span style="color:var(--gold);font-style:italic">nós.</span></h2>
+      <button class="button" id="enter-btn" type="button">Toque para entrar ♥</button>
+    </div>
+  </div>
+  <button class="music-toggle" id="music-toggle" type="button" aria-label="Pausar ou tocar a música">❚❚</button>
   <header class="wrap nav">
     <div class="brand">Um lugar só nosso ✦</div>
     <a href="#carta">Uma carta para você ↓</a>
@@ -127,10 +143,10 @@
           <div class="date-label">Nossa data especial</div>
           <div class="date-big">6 de setembro de 2021</div>
           <div class="time-grid" aria-live="polite">
-            <div class="time"><strong id="years">—</strong><span>ANOS</span></div>
-            <div class="time"><strong id="months">—</strong><span>MESES</span></div>
-            <div class="time"><strong id="days">—</strong><span>DIAS</span></div>
-            <div class="time"><strong id="hours">—</strong><span>HORAS</span></div>
+            <div class="time"><strong id="years">0</strong><span>ANOS</span></div>
+            <div class="time"><strong id="months">0</strong><span>MESES</span></div>
+            <div class="time"><strong id="days">0</strong><span>DIAS</span></div>
+            <div class="time"><strong id="hours">0</strong><span>HORAS</span></div>
           </div>
           <p class="subnote" id="date-note">Tempo desde 6 de setembro de 2021.</p>
           <p class="subnote" id="anniversary-note"></p>
@@ -143,7 +159,7 @@
         <div class="section-head">
           <div class="eyebrow">Com carinho, para você</div>
           <h2>Uma cartinha</h2>
-          <p>Tem coisas que merecem ser ditas com calma — e guardadas com carinho.</p>
+          <p>Tem coisas que merecem ser ditas com calma e guardadas com carinho.</p>
         </div>
         <div class="panel envelope-area">
           <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Abrir carta" aria-expanded="false">
@@ -155,7 +171,7 @@
               <p>Karolzinha,</p>
               <p>Criei este cantinho para guardar um pedacinho do carinho que tenho por você. Às vezes, a correria da vida não deixa a gente falar tudo o que sente, então fica aqui esse lembrete: sua amizade é especial e merece ser celebrada.</p>
               <p>Que a gente continue colecionando conversas, risadas, histórias e aqueles momentos simples que acabam se tornando os mais importantes. Que nunca faltem motivos para torcer uma pela outra, matar a saudade e lembrar do quanto é bom ter alguém querido por perto.</p>
-              <p>Este site ainda vai ganhar fotos, músicas e lembranças nossas — porque a nossa história é feita por nós, e cada detalhe merece ser verdadeiro.</p>
+              <p>Este site ainda vai ganhar fotos, músicas e lembranças nossas, porque a nossa história é feita por nós, e cada detalhe merece ser verdadeiro.</p>
               <p>Com muito carinho, hoje e sempre. ♥</p>
               <div class="sign">Para sempre nós.</div>
             </div>
@@ -169,7 +185,7 @@
         <div class="section-head">
           <div class="eyebrow">Pequenos pedaços da nossa história</div>
           <h2>Nossas memórias</h2>
-          <p>Espaço reservado para as fotos reais de vocês. Nenhuma lembrança foi inventada.</p>
+          <p>Espaço reservado para as fotos nossas. Nenhuma lembrança foi inventada.</p>
         </div>
         <div class="gallery">
           <div class="photo-slot has-media"><video controls playsinline preload="metadata" poster="media/memoria-1.jpg" src="media/memoria-1.mp4"></video></div>
@@ -196,7 +212,7 @@
           <span style="color:var(--gold);font-size:22px" aria-hidden="true">♪</span>
         </div>
         <div class="music-player">
-          <iframe src="https://www.youtube-nocookie.com/embed/m6TXPNybrmk" title="Nossa música" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <div id="yt-player"></div>
         </div>
       </div>
     </section>
@@ -252,6 +268,39 @@
       hint.textContent = isOpen ? 'Sua cartinha está aberta ♥' : 'Toque no envelope para abrir sua carta';
       if (isOpen) letter.scrollIntoView({behavior:'smooth', block:'nearest'});
     }
+    // Música: começa no toque de entrada (os navegadores só permitem som após um toque).
+    const VIDEO_ID = 'm6TXPNybrmk';
+    const gate = document.getElementById('intro-gate');
+    const toggleBtn = document.getElementById('music-toggle');
+    let player = null, playerReady = false, wantPlay = false, playing = false;
+    function setBtn() { toggleBtn.textContent = playing ? '❚❚' : '♪'; }
+    window.onYouTubeIframeAPIReady = function () {
+      player = new YT.Player('yt-player', {
+        width: '100%', height: '100%', videoId: VIDEO_ID,
+        playerVars: { rel: 0, playsinline: 1, loop: 1, playlist: VIDEO_ID },
+        events: {
+          onReady: () => { playerReady = true; if (wantPlay) player.playVideo(); },
+          onStateChange: (e) => { playing = e.data === 1; setBtn(); }
+        }
+      });
+    };
+    const apiTag = document.createElement('script');
+    apiTag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(apiTag);
+    document.getElementById('enter-btn').addEventListener('click', () => {
+      gate.classList.add('hide');
+      document.body.style.overflow = '';
+      toggleBtn.classList.add('on');
+      wantPlay = true;
+      if (playerReady) player.playVideo();
+    });
+    document.body.style.overflow = 'hidden';
+    toggleBtn.addEventListener('click', () => {
+      if (!playerReady) return;
+      if (playing) player.pauseVideo(); else player.playVideo();
+    });
+    setBtn();
+
     envelope.addEventListener('click', toggleLetter);
     envelope.addEventListener('keydown', (event) => {
       if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleLetter(); }
