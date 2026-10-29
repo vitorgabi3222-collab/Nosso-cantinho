@@ -145,6 +145,7 @@
   .lyric.on small { color: var(--gold); }
   .lyrics-card.no-trad .lyric small { display: none; }
   .lyrics-foot { margin: 16px 0 0; font-size: 11.5px; color: rgba(255,255,255,.6); }
+  .lyrics-foot a { color: var(--gold); }
 
   .intro-gate { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; text-align: center; padding: 24px;
     background: radial-gradient(ellipse at 50% 35%, rgba(154,53,86,.5), transparent 55%), var(--black); transition: opacity .7s ease, visibility .7s; }
@@ -152,6 +153,7 @@
   .intro-gate h2 { font-size: clamp(40px, 10vw, 76px); margin: 14px 0 28px; }
   .intro-gate h2 em { color: var(--gold); }
   .intro-gate .button { font-size: 14px; padding: 15px 30px; cursor: pointer; }
+  .intro-gate .button[disabled] { opacity: .55; cursor: default; }
   .music-toggle { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px)); z-index: 50;
     width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--gold-soft); background: rgba(38,14,28,.9); color: var(--gold); font-size: 18px; cursor: pointer; display: none; place-items: center; }
   .music-toggle.on { display: grid; }
@@ -180,7 +182,7 @@
   <div>
     <div class="eyebrow">Um céu só nosso ✦</div>
     <h2>Para sempre <em>nós.</em></h2>
-    <button class="button" id="enter-btn" type="button">Toque para entrar ♥</button>
+    <button class="button" id="enter-btn" type="button" disabled>Preparando a música…</button>
   </div>
 </div>
 <button class="music-toggle" id="music-toggle" type="button" aria-label="Pausar ou tocar a música">♪</button>
@@ -301,6 +303,7 @@
     const kind = m[1], id = m[2];
     const box = $('player'), gate = $('intro-gate'), tog = $('music-toggle');
     let ctrl = null, wantPlay = false, paused = true;
+    function readyUp() { const b = $('enter-btn'); b.disabled = false; b.textContent = 'Toque para entrar ♥'; }
     const setBtn = () => { tog.textContent = paused ? '♪' : '❚❚'; };
     function plainIframe() {
       if (ctrl || box.querySelector('iframe')) return;
@@ -314,14 +317,16 @@
     window.onSpotifyIframeApiReady = function (IFrameAPI) {
       IFrameAPI.createController(mount, { uri: 'spotify:' + kind + ':' + id, width: '100%', height: 152 }, function (c) {
         ctrl = c;
-        c.addListener('ready', function () { if (wantPlay) c.play(); });
-        c.addListener('playback_update', function (e) { paused = !!(e.data && e.data.isPaused); setBtn(); if (window.syncLyrics) window.syncLyrics(e.data ? e.data.position : 0, !paused); });
+        c.addListener('ready', function () { readyUp(); if (wantPlay) c.play(); });
+        c.addListener('playback_update', function (e) { paused = !!(e.data && e.data.isPaused); setBtn(); if (window.syncLyrics) window.syncLyrics(e.data ? e.data.position : 0, !paused);
+          if (location.hash === '#tempo' && e.data) $('lyrics-foot').textContent = 'tempo: ' + Math.floor(e.data.position / 1000) + 's'; });
       });
     };
     const sc = document.createElement('script');
     sc.src = 'https://open.spotify.com/embed/iframe-api/v1'; sc.async = true; sc.onerror = plainIframe;
     document.body.appendChild(sc);
     setTimeout(plainIframe, 7000);
+    setTimeout(readyUp, 8000);
     document.body.style.overflow = 'hidden';
     $('enter-btn').addEventListener('click', function () {
       gate.classList.add('hide'); document.body.style.overflow = '';
@@ -336,7 +341,7 @@
   (function () {
     const wrap = $('lyrics'), card = $('lyrics-card'), tog = $('trad-toggle');
     $('lyrics-title').textContent = SONG_TITLE;
-    $('lyrics-foot').textContent = 'Trecho de Yellow, de Coldplay.';
+    $('lyrics-foot').innerHTML = 'Trecho de Yellow, de Coldplay. <a href="' + SPOTIFY_URL + '" target="_blank" rel="noopener">Ver a letra completa no Spotify ↗</a>';
     let active = 0, timer = null, synced = false;
     LYRICS.forEach((l, i) => {
       const b = document.createElement('button');
