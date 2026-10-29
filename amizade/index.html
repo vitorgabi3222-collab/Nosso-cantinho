@@ -76,7 +76,12 @@
     padding: clamp(22px, 5vw, 44px); backdrop-filter: blur(6px); box-shadow: 0 20px 70px rgba(0,0,0,.35);
   }
 
-  /* Contador */
+  /* Anos de amizade */
+  .years { text-align: center; }
+  .years-num { font-family: var(--font-display); font-weight: 600; font-size: clamp(96px, 24vw, 190px); line-height: .9; color: var(--gold); text-shadow: 0 0 50px rgba(231,194,125,.28); }
+  .years-label { font-size: 12px; letter-spacing: .3em; font-weight: 600; color: var(--muted); margin-top: 10px; }
+  .years .note { max-width: 460px; margin: 22px auto 0; font-size: 15px; }
+  /* Contador (não usado) */
   .counter { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; max-width: 760px; margin: 24px auto 6px; }
   .unit { text-align: center; border: 1px solid rgba(231,194,125,.16); background: rgba(0,0,0,.22); border-radius: 16px; padding: 16px 6px; min-width: 0; }
   .unit strong { display: block; font-family: var(--font-display); font-weight: 600; font-size: clamp(26px, 5.4vw, 42px); color: var(--gold); line-height: 1.1; font-variant-numeric: tabular-nums; }
@@ -128,6 +133,8 @@
   .switch i::after { content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: #fff; transition: .2s; }
   .switch[aria-pressed="true"] i { background: var(--gold); }
   .switch[aria-pressed="true"] i::after { left: 16px; background: #2a0c19; }
+  #lyrics { max-height: 300px; overflow-y: auto; scrollbar-width: none; position: relative; padding: 70px 0; }
+  #lyrics::-webkit-scrollbar { display: none; }
   .lyric {
     all: unset; display: block; cursor: pointer; width: 100%; box-sizing: border-box; padding: 9px 0;
     font-weight: 800; font-size: clamp(22px, 5.6vw, 32px); line-height: 1.22; letter-spacing: -.01em;
@@ -180,7 +187,7 @@
 
 <div class="wrap topbar">
   <span>Um céu só nosso ✦</span>
-  <a href="#data">Nossa data ↓</a>
+  <a href="#data">Nossos 12 anos ↓</a>
 </div>
 
 <main>
@@ -189,26 +196,19 @@
     <div class="eyebrow reveal d1">Para Tata</div>
     <h1 class="reveal d2">Para sempre<br><em>nós.</em></h1>
     <p class="intro reveal d3">Tem gente que deixa a noite mais bonita só por existir. Este cantinho é um pedaço de céu que a gente guarda junto.</p>
-    <a class="button reveal d4" href="#data">Ver nosso tempo ✦</a>
+    <a class="button reveal d4" href="#data">Ver nossos 12 anos ✦</a>
   </section>
 
   <section id="data">
     <div class="wrap">
       <div class="head">
-        <div class="eyebrow">Um dia que acendeu uma estrela</div>
-        <h2>Desde aquele dia</h2>
+        <div class="eyebrow">Uma história de mais de uma década</div>
+        <h2>Doze anos de amizade</h2>
       </div>
-      <div class="panel">
-        <div class="date-big">6 de setembro de 2021</div>
-        <div class="counter" aria-live="off">
-          <div class="unit"><strong id="u-years">0</strong><span>ANOS</span></div>
-          <div class="unit"><strong id="u-months">0</strong><span>MESES</span></div>
-          <div class="unit"><strong id="u-days">0</strong><span>DIAS</span></div>
-          <div class="unit"><strong id="u-hours">0</strong><span>HORAS</span></div>
-          <div class="unit"><strong id="u-minutes">0</strong><span>MINUTOS</span></div>
-          <div class="unit"><strong id="u-seconds">0</strong><span>SEGUNDOS</span></div>
-        </div>
-        <p class="note" id="next-note"></p>
+      <div class="panel years">
+        <div class="years-num">12</div>
+        <div class="years-label">ANOS DE AMIZADE</div>
+        <p class="note">A gente não lembra o dia exato em que a primeira conversa começou, e tudo bem. O que importa é que ela nunca parou.</p>
       </div>
     </div>
   </section>
@@ -285,38 +285,12 @@
   // Trecho da letra que você quiser destacar, com a tradução embaixo (deixe trad vazio se não quiser).
   const SONG_TITLE = "Yellow · Coldplay";
   const LYRICS = [
-    { orig: "Look at the stars",           trad: "Olhe para as estrelas" },
-    { orig: "Look how they shine for you", trad: "Olhe como elas brilham para você" }
+    // t = segundo da música em que a linha acende (valores estimados, ajuste ouvindo a música)
+    { t: 29, orig: "Look at the stars",           trad: "Olhe para as estrelas" },
+    { t: 34, orig: "Look how they shine for you", trad: "Olhe como elas brilham para você" }
   ];
   const LYRICS_PLACEHOLDER = false;
   /* ======================== */
-
-  // Contador desde 6 de setembro de 2021
-  const start = new Date(2021, 8, 6, 0, 0, 0);
-  const $ = (id) => document.getElementById(id);
-  function tick() {
-    const now = new Date();
-    let years = now.getFullYear() - start.getFullYear();
-    let c = new Date(start); c.setFullYear(start.getFullYear() + years);
-    if (c > now) { years--; c = new Date(start); c.setFullYear(start.getFullYear() + years); }
-    let months = 0;
-    while (months < 11) {
-      const n = new Date(c); n.setMonth(c.getMonth() + 1);
-      if (n <= now) { c = n; months++; } else break;
-    }
-    let ms = Math.max(0, now - c);
-    const days = Math.floor(ms / 864e5); ms -= days * 864e5;
-    const hours = Math.floor(ms / 36e5); ms -= hours * 36e5;
-    const minutes = Math.floor(ms / 6e4); ms -= minutes * 6e4;
-    const seconds = Math.floor(ms / 1000);
-    $('u-years').textContent = years; $('u-months').textContent = months; $('u-days').textContent = days;
-    $('u-hours').textContent = hours; $('u-minutes').textContent = minutes; $('u-seconds').textContent = seconds;
-    let next = new Date(now.getFullYear(), 8, 6);
-    if (next <= now) next = new Date(now.getFullYear() + 1, 8, 6);
-    const left = Math.ceil((next - now) / 864e5);
-    $('next-note').textContent = 'Faltam ' + left + ' dias para o próximo 6 de setembro.';
-  }
-  tick(); setInterval(tick, 1000);
 
   // Player do Spotify, iniciado pelo toque de entrada
   (function () {
@@ -339,7 +313,7 @@
       IFrameAPI.createController(mount, { uri: 'spotify:' + kind + ':' + id, width: '100%', height: 152 }, function (c) {
         ctrl = c;
         c.addListener('ready', function () { if (wantPlay) c.play(); });
-        c.addListener('playback_update', function (e) { paused = !!(e.data && e.data.isPaused); setBtn(); });
+        c.addListener('playback_update', function (e) { paused = !!(e.data && e.data.isPaused); setBtn(); if (window.syncLyrics) window.syncLyrics(e.data ? e.data.position : 0, !paused); });
       });
     };
     const sc = document.createElement('script');
@@ -361,7 +335,7 @@
     const wrap = $('lyrics'), card = $('lyrics-card'), tog = $('trad-toggle');
     $('lyrics-title').textContent = SONG_TITLE;
     $('lyrics-foot').textContent = 'Trecho de Yellow, de Coldplay.';
-    let active = 0, timer = null;
+    let active = 0, timer = null, synced = false;
     LYRICS.forEach((l, i) => {
       const b = document.createElement('button');
       b.className = 'lyric'; b.type = 'button';
@@ -371,8 +345,19 @@
       wrap.appendChild(b);
     });
     const items = wrap.children;
-    function set(i) { active = i; [...items].forEach((el, k) => el.classList.toggle('on', k === i)); }
-    function restart() { clearInterval(timer); if (!matchMedia('(prefers-reduced-motion: reduce)').matches) timer = setInterval(() => set((active + 1) % items.length), 4200); }
+    function set(i) {
+      active = i; [...items].forEach((el, k) => el.classList.toggle('on', k === i));
+      const el = items[i]; if (el) wrap.scrollTo({ top: el.offsetTop - wrap.clientHeight / 2 + el.offsetHeight / 2, behavior: 'smooth' });
+    }
+    // Chamado pelo player a cada atualização: acende a linha que está sendo cantada
+    window.syncLyrics = function (posMs, playing) {
+      if (!playing || !LYRICS.some(l => l.t != null)) { synced = false; return; }
+      synced = true; clearInterval(timer);
+      const sec = posMs / 1000; let idx = -1;
+      LYRICS.forEach((l, k) => { if (l.t != null && l.t <= sec) idx = k; });
+      if (idx >= 0 && idx !== active) set(idx);
+    };
+    function restart() { clearInterval(timer); if (!synced && !matchMedia('(prefers-reduced-motion: reduce)').matches) timer = setInterval(() => set((active + 1) % items.length), 4200); }
     tog.addEventListener('click', () => {
       const on = tog.getAttribute('aria-pressed') === 'true';
       tog.setAttribute('aria-pressed', String(!on)); card.classList.toggle('no-trad', on);
