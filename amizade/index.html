@@ -292,6 +292,8 @@
   const LYRICS_PLACEHOLDER = false;
   /* ======================== */
 
+  const $ = (id) => document.getElementById(id);
+
   // Player do Spotify, iniciado pelo toque de entrada
   (function () {
     const m = SPOTIFY_URL.match(/\/(track|album|playlist|episode)\/([A-Za-z0-9]+)/);
