@@ -280,17 +280,15 @@
 <script>
   /* ====== Edite aqui ====== */
   // Link da música no Spotify. A música começa quando a pessoa toca em "Toque para entrar".
-  const SPOTIFY_URL = "https://open.spotify.com/intl-pt/track/3B5UbSndRz907IZhhmUfLi";
+  const SPOTIFY_URL = "https://open.spotify.com/intl-pt/track/3AJwUDP919kvQ9QcozQPxg";
 
   // Trecho da letra que você quiser destacar, com a tradução embaixo (deixe trad vazio se não quiser).
-  const SONG_TITLE = "Nossa música";
+  const SONG_TITLE = "Yellow · Coldplay";
   const LYRICS = [
-    { orig: "Cole aqui o primeiro verso do trecho",   trad: "e a tradução dele entra aqui" },
-    { orig: "Cada linha vira um destaque grande",      trad: "como na letra do Spotify" },
-    { orig: "A linha ativa acende e as outras apagam", trad: "e a tradução aparece embaixo" },
-    { orig: "Toque em qualquer linha para destacar",   trad: "ou deixe passar sozinho" }
+    { orig: "Look at the stars",           trad: "Olhe para as estrelas" },
+    { orig: "Look how they shine for you", trad: "Olhe como elas brilham para você" }
   ];
-  const LYRICS_PLACEHOLDER = true; // mude para false quando colocar o trecho real
+  const LYRICS_PLACEHOLDER = false;
   /* ======================== */
 
   // Contador desde 6 de setembro de 2021
@@ -362,7 +360,7 @@
   (function () {
     const wrap = $('lyrics'), card = $('lyrics-card'), tog = $('trad-toggle');
     $('lyrics-title').textContent = SONG_TITLE;
-    $('lyrics-foot').textContent = LYRICS_PLACEHOLDER ? 'Exemplo do visual. Envie o trecho que você quer destacar e a tradução entra aqui.' : '';
+    $('lyrics-foot').textContent = 'Trecho de Yellow, de Coldplay.';
     let active = 0, timer = null;
     LYRICS.forEach((l, i) => {
       const b = document.createElement('button');
