@@ -99,7 +99,10 @@
     border: 1.5px solid var(--gold); background: linear-gradient(160deg, rgba(90,24,48,.55), rgba(11,6,9,.7));
     box-shadow: 0 0 60px rgba(231,194,125,.14), 0 20px 60px rgba(0,0,0,.4);
   }
-  .frame img { width: 100%; height: 100%; object-fit: cover; display: block; position: relative; z-index: 1; }
+  .trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; width: 100%; }
+  .trio .frame { width: 100%; aspect-ratio: 3/4; }
+  .frame img, .frame video { width: 100%; height: 100%; object-fit: cover; display: block; position: relative; z-index: 1; }
+  @media (max-width: 720px) { .trio { grid-template-columns: 1fr; justify-items: center; } .trio .frame { width: min(320px, 82vw); } }
   .frame .empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; padding: 30px; color: var(--muted); font-size: 13px; }
   .frame .empty b { font-family: var(--font-display); font-weight: 500; font-size: 24px; color: var(--gold); }
   .caption { font-family: var(--font-display); font-style: italic; font-size: 22px; color: var(--gold); margin: 0; }
@@ -136,6 +139,15 @@
   .lyrics-card.no-trad .lyric small { display: none; }
   .lyrics-foot { margin: 16px 0 0; font-size: 11.5px; color: rgba(255,255,255,.6); }
 
+  .intro-gate { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; text-align: center; padding: 24px;
+    background: radial-gradient(ellipse at 50% 35%, rgba(154,53,86,.5), transparent 55%), var(--black); transition: opacity .7s ease, visibility .7s; }
+  .intro-gate.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+  .intro-gate h2 { font-size: clamp(40px, 10vw, 76px); margin: 14px 0 28px; }
+  .intro-gate h2 em { color: var(--gold); }
+  .intro-gate .button { font-size: 14px; padding: 15px 30px; cursor: pointer; }
+  .music-toggle { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px)); z-index: 50;
+    width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--gold-soft); background: rgba(38,14,28,.9); color: var(--gold); font-size: 18px; cursor: pointer; display: none; place-items: center; }
+  .music-toggle.on { display: grid; }
   footer { text-align: center; padding: 30px 0 50px; color: #a98c98; font-size: 12px; }
   footer .heart { color: var(--wine-light); font-size: 18px; }
 
@@ -157,6 +169,15 @@
 <body>
 <canvas id="sky" aria-hidden="true"></canvas>
 
+<div class="intro-gate" id="intro-gate" role="dialog" aria-label="Entrada">
+  <div>
+    <div class="eyebrow">Um céu só nosso ✦</div>
+    <h2>Para sempre <em>nós.</em></h2>
+    <button class="button" id="enter-btn" type="button">Toque para entrar ♥</button>
+  </div>
+</div>
+<button class="music-toggle" id="music-toggle" type="button" aria-label="Pausar ou tocar a música">♪</button>
+
 <div class="wrap topbar">
   <span>Um céu só nosso ✦</span>
   <a href="#data">Nossa data ↓</a>
@@ -165,7 +186,7 @@
 <main>
   <section class="hero wrap">
     <div class="moon" aria-hidden="true"></div>
-    <div class="eyebrow reveal d1">Para Karolzinha</div>
+    <div class="eyebrow reveal d1">Para Tata</div>
     <h1 class="reveal d2">Para sempre<br><em>nós.</em></h1>
     <p class="intro reveal d3">Tem gente que deixa a noite mais bonita só por existir. Este cantinho é um pedaço de céu que a gente guarda junto.</p>
     <a class="button reveal d4" href="#data">Ver nosso tempo ✦</a>
@@ -220,10 +241,10 @@
         <h2>Nós dois</h2>
       </div>
       <div class="photo-wrap">
-        <!-- Coloque a foto de vocês em media/foto.jpg -->
-        <div class="frame">
-          <div class="empty"><b>✦</b><span>Aqui entra a foto de vocês dois.<br>Salve como <code>media/foto.jpg</code>.</span></div>
-          <img src="media/foto.jpg" alt="Foto de vocês dois" onerror="this.remove()">
+        <div class="trio">
+          <div class="frame"><img src="media/foto-1.jpg" alt="Foto de vocês dois no espelho" loading="lazy"></div>
+          <div class="frame"><video autoplay muted loop playsinline preload="auto" poster="media/video.jpg" src="media/video.mp4"></video></div>
+          <div class="frame"><img src="media/foto-2.jpg" alt="Foto de vocês dois no campo" loading="lazy"></div>
         </div>
         <p class="caption">Dois amigos, um céu inteiro.</p>
       </div>
@@ -235,7 +256,7 @@
       <div class="head">
         <div class="eyebrow">A trilha sonora do nosso céu</div>
         <h2>Nossa música</h2>
-        <p>Aperte o play e deixe tocar enquanto lê a letra.</p>
+        <p>Deixe tocar enquanto lê a letra.</p>
       </div>
       <div class="player" id="player"></div>
 
@@ -252,15 +273,14 @@
 </main>
 
 <footer class="wrap">
-  Feito com carinho para Karolzinha <span class="heart">♥</span>
+  Feito com carinho para Tata <span class="heart">♥</span>
   <div>Um céu só nosso, para olhar sempre que der saudade.</div>
 </footer>
 
 <script>
   /* ====== Edite aqui ====== */
-  // Cole o link da música no Spotify (ex.: https://open.spotify.com/track/XXXX). Enquanto estiver vazio, toca o vídeo do YouTube abaixo.
-  const SPOTIFY_URL = "";
-  const YOUTUBE_ID  = "m6TXPNybrmk";
+  // Link da música no Spotify. A música começa quando a pessoa toca em "Toque para entrar".
+  const SPOTIFY_URL = "https://open.spotify.com/intl-pt/track/3B5UbSndRz907IZhhmUfLi";
 
   // Trecho da letra que você quiser destacar, com a tradução embaixo (deixe trad vazio se não quiser).
   const SONG_TITLE = "Nossa música";
@@ -300,22 +320,42 @@
   }
   tick(); setInterval(tick, 1000);
 
-  // Player: Spotify se houver link, senão YouTube
+  // Player do Spotify, iniciado pelo toque de entrada
   (function () {
-    const box = $('player');
-    const m = SPOTIFY_URL.match(/open\.spotify\.com\/(?:intl-[a-z]+\/)?(track|album|playlist|episode)\/([A-Za-z0-9]+)/);
-    const f = document.createElement('iframe');
-    f.loading = 'lazy'; f.setAttribute('allowfullscreen', '');
-    if (m) {
-      f.src = 'https://open.spotify.com/embed/' + m[1] + '/' + m[2] + '?theme=0';
-      f.height = '152'; f.title = 'Nossa música no Spotify';
+    const m = SPOTIFY_URL.match(/\/(track|album|playlist|episode)\/([A-Za-z0-9]+)/);
+    if (!m) return;
+    const kind = m[1], id = m[2];
+    const box = $('player'), gate = $('intro-gate'), tog = $('music-toggle');
+    let ctrl = null, wantPlay = false, paused = true;
+    const setBtn = () => { tog.textContent = paused ? '♪' : '❚❚'; };
+    function plainIframe() {
+      if (ctrl || box.querySelector('iframe')) return;
+      const f = document.createElement('iframe');
+      f.src = 'https://open.spotify.com/embed/' + kind + '/' + id + '?theme=0';
+      f.height = '152'; f.title = 'Nossa música no Spotify'; f.loading = 'lazy';
       f.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
-    } else {
-      f.src = 'https://www.youtube-nocookie.com/embed/' + YOUTUBE_ID;
-      f.title = 'Nossa música'; box.classList.add('yt');
-      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      box.appendChild(f);
     }
-    box.appendChild(f);
+    const mount = document.createElement('div'); box.appendChild(mount);
+    window.onSpotifyIframeApiReady = function (IFrameAPI) {
+      IFrameAPI.createController(mount, { uri: 'spotify:' + kind + ':' + id, width: '100%', height: 152 }, function (c) {
+        ctrl = c;
+        c.addListener('ready', function () { if (wantPlay) c.play(); });
+        c.addListener('playback_update', function (e) { paused = !!(e.data && e.data.isPaused); setBtn(); });
+      });
+    };
+    const sc = document.createElement('script');
+    sc.src = 'https://open.spotify.com/embed/iframe-api/v1'; sc.async = true; sc.onerror = plainIframe;
+    document.body.appendChild(sc);
+    setTimeout(plainIframe, 7000);
+    document.body.style.overflow = 'hidden';
+    $('enter-btn').addEventListener('click', function () {
+      gate.classList.add('hide'); document.body.style.overflow = '';
+      tog.classList.add('on'); wantPlay = true;
+      if (ctrl) ctrl.play();
+    });
+    tog.addEventListener('click', function () { if (ctrl) ctrl.togglePlay(); });
+    setBtn();
   })();
 
   // Letra estilo Spotify
