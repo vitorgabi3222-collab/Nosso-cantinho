@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b0609">
+<title>Para sempre nós ✦</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Manrope:wght@400;600;800&display=swap">
+<style>
+  /* Layout: céu estrelado em tela cheia, lua no topo, seções empilhadas em cartões de vidro vinho. */
+  :root {
+    --black: #0b0609;
+    --night: #150a12;
+    --wine: #5a1830;
+    --wine-light: #9a3556;
+    --gold: #e7c27d;
+    --gold-soft: rgba(231,194,125,.28);
+    --cream: #f6ece6;
+    --muted: #c3a9b4;
+    --panel: rgba(38,14,28,.72);
+    --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    --font-body: "Manrope", "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; background: var(--black); }
+  body {
+    margin: 0; color: var(--cream); font-family: var(--font-body); line-height: 1.65;
+    background: radial-gradient(ellipse at 50% 0%, #2b0f21 0%, var(--night) 40%, var(--black) 100%) fixed;
+    padding-left: env(safe-area-inset-left, 0); padding-right: env(safe-area-inset-right, 0);
+  }
+  #sky { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+  main, footer, .topbar { position: relative; z-index: 1; }
+  .wrap { width: min(1000px, 91%); margin: 0 auto; }
+  a { color: var(--gold); }
+
+  .topbar { display: flex; justify-content: space-between; gap: 16px; padding: 22px 0; }
+  .topbar span, .topbar a { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); text-decoration: none; }
+  .topbar a { color: var(--muted); }
+
+  .eyebrow { color: var(--gold); text-transform: uppercase; letter-spacing: .24em; font-size: 11px; font-weight: 600; }
+  h1, h2 { font-family: var(--font-display); font-weight: 500; margin: 0; text-wrap: balance; }
+  h1 { font-size: clamp(54px, 11vw, 112px); line-height: .98; margin: 18px 0 20px; }
+  h1 em { color: var(--gold); font-style: italic; }
+  h2 { font-size: clamp(34px, 6vw, 52px); margin: 8px 0 12px; }
+  section { padding: 56px 0; }
+  .head { text-align: center; margin-bottom: 28px; }
+  .head p { color: var(--muted); max-width: 560px; margin: 0 auto; }
+
+  /* Lua */
+  .hero { text-align: center; padding: 34px 0 70px; }
+  .moon {
+    width: clamp(120px, 26vw, 190px); aspect-ratio: 1; border-radius: 50%; margin: 0 auto 34px; position: relative;
+    background:
+      radial-gradient(circle at 34% 30%, rgba(120,90,60,.35) 0 7%, transparent 8%),
+      radial-gradient(circle at 62% 58%, rgba(120,90,60,.28) 0 11%, transparent 12%),
+      radial-gradient(circle at 44% 74%, rgba(120,90,60,.22) 0 6%, transparent 7%),
+      radial-gradient(circle at 36% 32%, #fff6dc 0%, #f4dfa8 48%, #d9b46a 100%);
+    box-shadow: 0 0 60px 18px rgba(231,194,125,.28), 0 0 150px 50px rgba(154,53,86,.22);
+    animation: moonfloat 7s ease-in-out infinite;
+  }
+  .moon::after { content: ""; position: absolute; inset: -22%; border-radius: 50%; border: 1px solid rgba(231,194,125,.14); animation: halo 7s ease-in-out infinite; }
+  @keyframes moonfloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+  @keyframes halo { 0%,100% { transform: scale(1); opacity: .9; } 50% { transform: scale(1.08); opacity: .4; } }
+  .intro { max-width: 540px; margin: 0 auto 30px; color: #e3d0d8; font-size: 17px; }
+  .button {
+    display: inline-block; border: 1px solid var(--gold-soft); background: rgba(38,14,28,.55); color: var(--gold);
+    padding: 13px 24px; border-radius: 999px; font-size: 12px; letter-spacing: .1em; text-decoration: none; transition: .25s;
+  }
+  .button:hover { background: rgba(154,53,86,.45); transform: translateY(-2px); }
+  .button:focus-visible, .lyric:focus-visible, .switch:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+  .panel {
+    background: var(--panel); border: 1px solid var(--gold-soft); border-radius: 26px;
+    padding: clamp(22px, 5vw, 44px); backdrop-filter: blur(6px); box-shadow: 0 20px 70px rgba(0,0,0,.35);
+  }
+
+  /* Contador */
+  .counter { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; max-width: 760px; margin: 24px auto 6px; }
+  .unit { text-align: center; border: 1px solid rgba(231,194,125,.16); background: rgba(0,0,0,.22); border-radius: 16px; padding: 16px 6px; min-width: 0; }
+  .unit strong { display: block; font-family: var(--font-display); font-weight: 600; font-size: clamp(26px, 5.4vw, 42px); color: var(--gold); line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .unit span { font-size: 9.5px; letter-spacing: .14em; color: var(--muted); font-weight: 600; }
+  .date-big { text-align: center; font-family: var(--font-display); font-size: clamp(28px, 5.4vw, 44px); margin: 6px 0 0; }
+  .note { text-align: center; color: var(--muted); font-size: 13px; margin: 16px 0 0; }
+
+  /* Mensagem */
+  .letter { max-width: 680px; margin: 0 auto; }
+  .letter p { font-family: var(--font-display); font-size: clamp(20px, 3.4vw, 25px); line-height: 1.55; color: #f0e0e6; margin: 0 0 16px; }
+  .letter .hi { color: var(--gold); font-style: italic; }
+  .letter .sign { color: var(--gold); font-style: italic; font-size: 26px; margin-top: 26px; }
+  .letter .joke { border-left: 2px solid var(--gold); padding-left: 18px; }
+
+  /* Foto */
+  .photo-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .frame {
+    width: min(340px, 82vw); aspect-ratio: 4/5; border-radius: 999px 999px 24px 24px; overflow: hidden; position: relative;
+    border: 1.5px solid var(--gold); background: linear-gradient(160deg, rgba(90,24,48,.55), rgba(11,6,9,.7));
+    box-shadow: 0 0 60px rgba(231,194,125,.14), 0 20px 60px rgba(0,0,0,.4);
+  }
+  .frame img { width: 100%; height: 100%; object-fit: cover; display: block; position: relative; z-index: 1; }
+  .frame .empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; padding: 30px; color: var(--muted); font-size: 13px; }
+  .frame .empty b { font-family: var(--font-display); font-weight: 500; font-size: 24px; color: var(--gold); }
+  .caption { font-family: var(--font-display); font-style: italic; font-size: 22px; color: var(--gold); margin: 0; }
+
+  /* Música */
+  .player { max-width: 560px; margin: 0 auto; border-radius: 16px; overflow: hidden; }
+  .player iframe { width: 100%; border: 0; display: block; }
+  .player.yt iframe { aspect-ratio: 16/9; height: auto; background: #000; }
+
+  /* Letra estilo Spotify */
+  .lyrics-card {
+    max-width: 560px; margin: 26px auto 0; border-radius: 22px; padding: 24px 22px 28px; position: relative; overflow: hidden;
+    background: linear-gradient(170deg, #8a2b4d 0%, #4a1329 55%, #230a17 100%);
+    box-shadow: 0 20px 60px rgba(0,0,0,.45);
+  }
+  .lyrics-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+  .lyrics-top .tag { font-weight: 800; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.85); }
+  .switch {
+    all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: rgba(255,255,255,.88);
+    padding: 6px 12px; border-radius: 999px; background: rgba(0,0,0,.28);
+  }
+  .switch i { width: 30px; height: 16px; border-radius: 999px; background: rgba(255,255,255,.3); position: relative; transition: .2s; }
+  .switch i::after { content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: #fff; transition: .2s; }
+  .switch[aria-pressed="true"] i { background: var(--gold); }
+  .switch[aria-pressed="true"] i::after { left: 16px; background: #2a0c19; }
+  .lyric {
+    all: unset; display: block; cursor: pointer; width: 100%; box-sizing: border-box; padding: 9px 0;
+    font-weight: 800; font-size: clamp(22px, 5.6vw, 32px); line-height: 1.22; letter-spacing: -.01em;
+    color: rgba(255,255,255,.38); transition: color .4s ease, transform .4s ease; transform-origin: left center;
+  }
+  .lyric small { display: block; margin-top: 4px; font-weight: 600; font-size: 15px; letter-spacing: 0; color: inherit; opacity: .9; }
+  .lyric.on { color: #fff; transform: scale(1.02); }
+  .lyric.on small { color: var(--gold); }
+  .lyrics-card.no-trad .lyric small { display: none; }
+  .lyrics-foot { margin: 16px 0 0; font-size: 11.5px; color: rgba(255,255,255,.6); }
+
+  footer { text-align: center; padding: 30px 0 50px; color: #a98c98; font-size: 12px; }
+  footer .heart { color: var(--wine-light); font-size: 18px; }
+
+  .reveal { opacity: 0; transform: translateY(16px); animation: rise .9s ease forwards; }
+  .d1 { animation-delay: .1s; } .d2 { animation-delay: .35s; } .d3 { animation-delay: .6s; } .d4 { animation-delay: .85s; }
+  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 640px) {
+    .counter { grid-template-columns: repeat(3, 1fr); }
+    .topbar a { max-width: 130px; text-align: right; line-height: 1.5; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .moon, .moon::after { animation: none; }
+    .reveal { animation: none; opacity: 1; transform: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+
+<div class="wrap topbar">
+  <span>Um céu só nosso ✦</span>
+  <a href="#data">Nossa data ↓</a>
+</div>
+
+<main>
+  <section class="hero wrap">
+    <div class="moon" aria-hidden="true"></div>
+    <div class="eyebrow reveal d1">Para Karolzinha</div>
+    <h1 class="reveal d2">Para sempre<br><em>nós.</em></h1>
+    <p class="intro reveal d3">Tem gente que deixa a noite mais bonita só por existir. Este cantinho é um pedaço de céu que a gente guarda junto.</p>
+    <a class="button reveal d4" href="#data">Ver nosso tempo ✦</a>
+  </section>
+
+  <section id="data">
+    <div class="wrap">
+      <div class="head">
+        <div class="eyebrow">Um dia que acendeu uma estrela</div>
+        <h2>Desde aquele dia</h2>
+      </div>
+      <div class="panel">
+        <div class="date-big">6 de setembro de 2021</div>
+        <div class="counter" aria-live="off">
+          <div class="unit"><strong id="u-years">0</strong><span>ANOS</span></div>
+          <div class="unit"><strong id="u-months">0</strong><span>MESES</span></div>
+          <div class="unit"><strong id="u-days">0</strong><span>DIAS</span></div>
+          <div class="unit"><strong id="u-hours">0</strong><span>HORAS</span></div>
+          <div class="unit"><strong id="u-minutes">0</strong><span>MINUTOS</span></div>
+          <div class="unit"><strong id="u-seconds">0</strong><span>SEGUNDOS</span></div>
+        </div>
+        <p class="note" id="next-note"></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="mensagem">
+    <div class="wrap">
+      <div class="head">
+        <div class="eyebrow">Com carinho, para você</div>
+        <h2>Uma cartinha</h2>
+      </div>
+      <div class="panel letter">
+        <p class="hi">Karolzinha,</p>
+        <p>Se a nossa amizade fosse uma receita, ela seria o tereré com açúcar demais: ninguém mandou, qualquer um estranharia, e mesmo assim a gente repete e acha perfeito.</p>
+        <p class="joke">E se fosse um programa de noite, seria aquela pipoca salgada que a gente jura que vai ser doce e come até o fim sem reclamar.</p>
+        <p>Nada entre nós seguiu a receita certa, e ainda bem. Do nosso jeito, cada lembrança virou uma estrelinha, e hoje a gente tem um céu inteiro.</p>
+        <p>Que a gente continue errando a medida do açúcar e do sal, e acertando no que importa: estar junto, rir à toa e olhar pra mesma lua.</p>
+        <p class="sign">Para sempre nós. ♥</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="foto">
+    <div class="wrap">
+      <div class="head">
+        <div class="eyebrow">Sob a mesma lua</div>
+        <h2>Nós dois</h2>
+      </div>
+      <div class="photo-wrap">
+        <!-- Coloque a foto de vocês em media/foto.jpg -->
+        <div class="frame">
+          <div class="empty"><b>✦</b><span>Aqui entra a foto de vocês dois.<br>Salve como <code>media/foto.jpg</code>.</span></div>
+          <img src="media/foto.jpg" alt="Foto de vocês dois" onerror="this.remove()">
+        </div>
+        <p class="caption">Dois amigos, um céu inteiro.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="musica">
+    <div class="wrap">
+      <div class="head">
+        <div class="eyebrow">A trilha sonora do nosso céu</div>
+        <h2>Nossa música</h2>
+        <p>Aperte o play e deixe tocar enquanto lê a letra.</p>
+      </div>
+      <div class="player" id="player"></div>
+
+      <div class="lyrics-card" id="lyrics-card" aria-label="Letra da música">
+        <div class="lyrics-top">
+          <span class="tag" id="lyrics-title">Letra</span>
+          <button class="switch" id="trad-toggle" type="button" aria-pressed="true"><i></i>Tradução</button>
+        </div>
+        <div id="lyrics"></div>
+        <p class="lyrics-foot" id="lyrics-foot"></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  Feito com carinho para Karolzinha <span class="heart">♥</span>
+  <div>Um céu só nosso, para olhar sempre que der saudade.</div>
+</footer>
+
+<script>
+  /* ====== Edite aqui ====== */
+  // Cole o link da música no Spotify (ex.: https://open.spotify.com/track/XXXX). Enquanto estiver vazio, toca o vídeo do YouTube abaixo.
+  const SPOTIFY_URL = "";
+  const YOUTUBE_ID  = "m6TXPNybrmk";
+
+  // Trecho da letra que você quiser destacar, com a tradução embaixo (deixe trad vazio se não quiser).
+  const SONG_TITLE = "Nossa música";
+  const LYRICS = [
+    { orig: "Cole aqui o primeiro verso do trecho",   trad: "e a tradução dele entra aqui" },
+    { orig: "Cada linha vira um destaque grande",      trad: "como na letra do Spotify" },
+    { orig: "A linha ativa acende e as outras apagam", trad: "e a tradução aparece embaixo" },
+    { orig: "Toque em qualquer linha para destacar",   trad: "ou deixe passar sozinho" }
+  ];
+  const LYRICS_PLACEHOLDER = true; // mude para false quando colocar o trecho real
+  /* ======================== */
+
+  // Contador desde 6 de setembro de 2021
+  const start = new Date(2021, 8, 6, 0, 0, 0);
+  const $ = (id) => document.getElementById(id);
+  function tick() {
+    const now = new Date();
+    let years = now.getFullYear() - start.getFullYear();
+    let c = new Date(start); c.setFullYear(start.getFullYear() + years);
+    if (c > now) { years--; c = new Date(start); c.setFullYear(start.getFullYear() + years); }
+    let months = 0;
+    while (months < 11) {
+      const n = new Date(c); n.setMonth(c.getMonth() + 1);
+      if (n <= now) { c = n; months++; } else break;
+    }
+    let ms = Math.max(0, now - c);
+    const days = Math.floor(ms / 864e5); ms -= days * 864e5;
+    const hours = Math.floor(ms / 36e5); ms -= hours * 36e5;
+    const minutes = Math.floor(ms / 6e4); ms -= minutes * 6e4;
+    const seconds = Math.floor(ms / 1000);
+    $('u-years').textContent = years; $('u-months').textContent = months; $('u-days').textContent = days;
+    $('u-hours').textContent = hours; $('u-minutes').textContent = minutes; $('u-seconds').textContent = seconds;
+    let next = new Date(now.getFullYear(), 8, 6);
+    if (next <= now) next = new Date(now.getFullYear() + 1, 8, 6);
+    const left = Math.ceil((next - now) / 864e5);
+    $('next-note').textContent = 'Faltam ' + left + ' dias para o próximo 6 de setembro.';
+  }
+  tick(); setInterval(tick, 1000);
+
+  // Player: Spotify se houver link, senão YouTube
+  (function () {
+    const box = $('player');
+    const m = SPOTIFY_URL.match(/open\.spotify\.com\/(?:intl-[a-z]+\/)?(track|album|playlist|episode)\/([A-Za-z0-9]+)/);
+    const f = document.createElement('iframe');
+    f.loading = 'lazy'; f.setAttribute('allowfullscreen', '');
+    if (m) {
+      f.src = 'https://open.spotify.com/embed/' + m[1] + '/' + m[2] + '?theme=0';
+      f.height = '152'; f.title = 'Nossa música no Spotify';
+      f.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+    } else {
+      f.src = 'https://www.youtube-nocookie.com/embed/' + YOUTUBE_ID;
+      f.title = 'Nossa música'; box.classList.add('yt');
+      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    }
+    box.appendChild(f);
+  })();
+
+  // Letra estilo Spotify
+  (function () {
+    const wrap = $('lyrics'), card = $('lyrics-card'), tog = $('trad-toggle');
+    $('lyrics-title').textContent = SONG_TITLE;
+    $('lyrics-foot').textContent = LYRICS_PLACEHOLDER ? 'Exemplo do visual. Envie o trecho que você quer destacar e a tradução entra aqui.' : '';
+    let active = 0, timer = null;
+    LYRICS.forEach((l, i) => {
+      const b = document.createElement('button');
+      b.className = 'lyric'; b.type = 'button';
+      const t = document.createElement('span'); t.textContent = l.orig; b.appendChild(t);
+      if (l.trad) { const s = document.createElement('small'); s.textContent = l.trad; b.appendChild(s); }
+      b.addEventListener('click', () => { set(i); restart(); });
+      wrap.appendChild(b);
+    });
+    const items = wrap.children;
+    function set(i) { active = i; [...items].forEach((el, k) => el.classList.toggle('on', k === i)); }
+    function restart() { clearInterval(timer); if (!matchMedia('(prefers-reduced-motion: reduce)').matches) timer = setInterval(() => set((active + 1) % items.length), 4200); }
+    tog.addEventListener('click', () => {
+      const on = tog.getAttribute('aria-pressed') === 'true';
+      tog.setAttribute('aria-pressed', String(!on)); card.classList.toggle('no-trad', on);
+    });
+    set(0); restart();
+  })();
+
+  // Céu estrelado
+  (function () {
+    const cv = $('sky'), ctx = cv.getContext('2d');
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let W, H, stars = [], shoot = null;
+    function size() {
+      const d = Math.min(devicePixelRatio || 1, 2);
+      W = innerWidth; H = innerHeight; cv.width = W * d; cv.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0);
+      const n = Math.round(W * H / 5200);
+      stars = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.3 + .2, p: Math.random() * 6.28, s: Math.random() * .02 + .005, gold: Math.random() < .22 }));
+    }
+    function draw(t) {
+      ctx.clearRect(0, 0, W, H);
+      for (const s of stars) {
+        const a = reduce ? .65 : .35 + .65 * Math.abs(Math.sin(s.p + t * s.s * .06));
+        ctx.globalAlpha = a; ctx.fillStyle = s.gold ? '#f1d391' : '#fff4f0';
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.2832); ctx.fill();
+      }
+      if (!reduce) {
+        if (!shoot && Math.random() < .004) shoot = { x: Math.random() * W * .8 + W * .2, y: Math.random() * H * .3, l: 0 };
+        if (shoot) {
+          shoot.x -= 9; shoot.y += 4.5; shoot.l += 1;
+          const g = ctx.createLinearGradient(shoot.x, shoot.y, shoot.x + 90, shoot.y - 45);
+          g.addColorStop(0, 'rgba(255,236,190,.95)'); g.addColorStop(1, 'rgba(255,236,190,0)');
+          ctx.globalAlpha = 1; ctx.strokeStyle = g; ctx.lineWidth = 1.6;
+          ctx.beginPath(); ctx.moveTo(shoot.x, shoot.y); ctx.lineTo(shoot.x + 90, shoot.y - 45); ctx.stroke();
+          if (shoot.l > 60 || shoot.x < -100) shoot = null;
+        }
+        requestAnimationFrame(draw);
+      }
+    }
+    size(); addEventListener('resize', () => { size(); if (reduce) draw(0); });
+    reduce ? draw(0) : requestAnimationFrame(draw);
+  })();
+</script>
+</body>
+</html>
