@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#05070d">
+  <title>Meu farol, minha casa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Great+Vibes&family=Jost:wght@400;500&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="lock">
+
+  <!-- Símbolo de flor reutilizado em vários pontos da página -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="flower" viewBox="0 0 40 40">
+      <g fill="currentColor" opacity=".92">
+        <ellipse cx="20" cy="10" rx="5.2" ry="9"/>
+        <ellipse cx="20" cy="10" rx="5.2" ry="9" transform="rotate(72 20 20)"/>
+        <ellipse cx="20" cy="10" rx="5.2" ry="9" transform="rotate(144 20 20)"/>
+        <ellipse cx="20" cy="10" rx="5.2" ry="9" transform="rotate(216 20 20)"/>
+        <ellipse cx="20" cy="10" rx="5.2" ry="9" transform="rotate(288 20 20)"/>
+      </g>
+      <circle cx="20" cy="20" r="4.2" fill="#f0c675"/>
+    </symbol>
+  </svg>
+
+  <!-- ==================== CENA 1: O FAROL NO MAR ==================== -->
+  <section id="scene1" aria-label="O farol no mar turbulento">
+    <canvas id="sea" aria-hidden="true"></canvas>
+    <div class="s1-content">
+      <h1 class="s1-title">Meu farol,<br>minha casa.</h1>
+      <p class="s1-sub">Em meio a tantos mares turbulentos, sempre existiu uma luz que me mostrou o caminho de volta para casa.</p>
+      <button id="light-btn" class="light-btn" type="button"><span>Acenda essa luz ♡</span></button>
+    </div>
+  </section>
+
+  <!-- Clarão dourado usado na transição entre as cenas -->
+  <div id="flash" aria-hidden="true"></div>
+
+  <!-- ==================== CENA 2: ÁRVORE DE CORAÇÕES ==================== -->
+  <div id="scene2">
+    <canvas id="tree" aria-hidden="true"></canvas>
+
+    <main class="story">
+
+      <!-- Abertura: a árvore ocupa a tela -->
+      <header class="hero2">
+        <p class="hero2-title">Meu farol, minha casa</p>
+        <p class="scroll-hint">role para continuar<span aria-hidden="true">↓</span></p>
+      </header>
+
+      <!-- As datas -->
+      <section class="block" id="datas">
+        <div class="wrap">
+          <p class="eyebrow reveal">A nossa história</p>
+          <div class="dates">
+            <div class="card date-card reveal">
+              <span class="date-label">O seu começo</span>
+              <span class="date-big">21 · 01 · 1974</span>
+            </div>
+            <div class="card date-card reveal" style="--d:.25s">
+              <span class="date-label">O meu começo</span>
+              <span class="date-big">15 · 08 · 2005</span>
+            </div>
+          </div>
+          <div class="card statement reveal" style="--d:.2s">
+            <p>Você viveu <b>31 anos</b>, <b>6 meses</b> e <b>25 dias</b> sem mim.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- O ponto emocional do site -->
+      <section class="block block-peak" id="peak">
+        <div class="wrap">
+          <div class="card peak-card">
+            <p class="peak" id="peak-text">E eu nunca passei um dia sequer sem ter você neste mundo.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- A mensagem -->
+      <section class="block" id="mensagem">
+        <div class="wrap">
+          <div class="card letter reveal">
+            <svg class="flower f-tl" aria-hidden="true"><use href="#flower"/></svg>
+            <svg class="flower f-br" aria-hidden="true"><use href="#flower"/></svg>
+            <p>Desde o meu primeiro dia, você já fazia parte de todos os meus. Obrigado por ser abrigo quando o mar fica agitado, por ser direção quando eu não sei para onde ir e por continuar sendo luz, mesmo nos dias em que talvez nem perceba o quanto ilumina.</p>
+          </div>
+          <p class="love reveal">Eu te amo, mãe. ♡</p>
+        </div>
+      </section>
+
+      <!-- A música -->
+      <section class="block block-music" id="musica">
+        <div class="wrap">
+          <p class="eyebrow reveal">A trilha sonora</p>
+          <h2 class="music-title reveal">93 Million Miles · Jason Mraz</h2>
+          <div class="player reveal" id="player" aria-label="Player do Spotify"></div>
+          <p class="closing reveal">Antes mesmo de eu conhecer o mundo, você já era a luz que um dia me mostraria o caminho.</p>
+          <div class="divider reveal" aria-hidden="true">
+            <svg class="flower"><use href="#flower"/></svg>
+            <svg class="flower small"><use href="#flower"/></svg>
+            <svg class="flower"><use href="#flower"/></svg>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Controles flutuantes da música -->
+  <button id="music-toggle" class="music-toggle" type="button" aria-label="Pausar ou tocar a música">♪</button>
+  <button id="music-pill" class="music-pill" type="button" hidden>A música não começou? Toque aqui para abrir o player</button>
+
+  <script src="js/sea.js"></script>
+  <script src="js/tree.js"></script>
+  <script src="js/music.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
