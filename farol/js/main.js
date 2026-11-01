@@ -68,6 +68,18 @@
     return '<span class="w" style="--i:' + i + '" aria-hidden="true">' + w + '</span> ';
   }).join('');
 
+  /* ---------- A carta: fechada no envelope, abre ao clicar ---------- */
+  const env = $('envelope'), letter = $('letter-content'), hint = $('envelope-hint');
+  Array.prototype.forEach.call(letter.querySelectorAll('p'), function (p, i) { p.style.setProperty('--i', Math.min(i, 14)); });
+  env.addEventListener('click', function () {
+    const open = letter.hidden;
+    letter.hidden = !open;
+    letter.classList.toggle('open', open);
+    env.setAttribute('aria-expanded', String(open));
+    hint.textContent = open ? 'Toque no envelope para fechar a carta' : 'Toque no envelope para abrir a carta';
+    if (open) letter.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
   /* ---------- Textos que surgem ao rolar ---------- */
   const targets = document.querySelectorAll('.reveal, .peak');
   if ('IntersectionObserver' in window) {
