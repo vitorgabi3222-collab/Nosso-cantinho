@@ -9,6 +9,7 @@
   const btn = $('light-btn'), scene1 = $('scene1'), scene2 = $('scene2');
   const toggle = $('music-toggle'), pill = $('music-pill');
   let started = false;
+  body.classList.add('lock');   // a cena 1 ocupa a tela; a rolagem só libera depois do clique
 
   /* ---------- Transição: da tempestade para o acolhimento ---------- */
   btn.addEventListener('click', function () {
@@ -78,6 +79,28 @@
     env.setAttribute('aria-expanded', String(open));
     hint.textContent = open ? 'Toque no envelope para fechar a carta' : 'Toque no envelope para abrir a carta';
     if (open) letter.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  /* ---------- Galeria: toque para ampliar ---------- */
+  const lb = $('lightbox'), lbImg = $('lb-img');
+  const shots = Array.prototype.slice.call(document.querySelectorAll('.shot img'));
+  let cur = 0;
+  function showShot(i) {
+    cur = (i + shots.length) % shots.length;
+    lbImg.src = shots[cur].src; lbImg.alt = shots[cur].alt;
+  }
+  function openShot(i) { showShot(i); lb.hidden = false; $('lb-close').focus(); }
+  function closeShot() { lb.hidden = true; lbImg.removeAttribute('src'); }
+  shots.forEach(function (img, i) { img.addEventListener('click', function () { openShot(i); }); });
+  $('lb-close').addEventListener('click', closeShot);
+  $('lb-prev').addEventListener('click', function () { showShot(cur - 1); });
+  $('lb-next').addEventListener('click', function () { showShot(cur + 1); });
+  lb.addEventListener('click', function (e) { if (e.target === lb) closeShot(); });
+  document.addEventListener('keydown', function (e) {
+    if (lb.hidden) return;
+    if (e.key === 'Escape') closeShot();
+    if (e.key === 'ArrowLeft') showShot(cur - 1);
+    if (e.key === 'ArrowRight') showShot(cur + 1);
   });
 
   /* ---------- Textos que surgem ao rolar ---------- */

@@ -110,7 +110,7 @@ body.transition #flash { animation: flash 3s ease forwards; }
 @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
 
 .block { padding: 14vh 0; }
-.eyebrow { text-align: center; margin: 0 0 22px; font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); }
+.eyebrow { text-align: center; margin: 0 0 22px; font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: var(--gold);  text-shadow: 0 2px 14px rgba(0, 0, 0, .95), 0 0 6px rgba(0, 0, 0, .8); }
 
 .card {
   position: relative; background: rgba(6, 8, 16, .7); border: 1px solid var(--gold-soft); border-radius: 22px;
@@ -151,6 +151,28 @@ body.transition #flash { animation: flash 3s ease forwards; }
   margin: 44px 0 0; text-align: center; font-family: var(--font-script); font-size: clamp(54px, 13vw, 100px); line-height: 1.1;
   color: var(--gold); text-shadow: 0 0 40px rgba(240, 198, 117, .5);
 }
+
+/* Galeria de fotos e vídeo */
+.wrap.wide { width: min(1040px, 92%); }
+.gal-title { text-shadow: 0 3px 22px rgba(0, 0, 0, .95), 0 0 8px rgba(0, 0, 0, .7); margin: 0 0 30px; text-align: center; font-family: var(--font-display); font-weight: 500; font-style: italic; font-size: clamp(32px, 6vw, 50px); }
+.gallery { columns: 3; column-gap: 14px; }
+.shot { break-inside: avoid; margin: 0 0 14px; border-radius: 16px; overflow: hidden; border: 1px solid var(--gold-soft); background: #000; box-shadow: 0 14px 40px rgba(0, 0, 0, .45); }
+.shot img, .shot video { display: block; width: 100%; height: auto; }
+.shot img { cursor: zoom-in; transition: transform .5s ease, filter .5s ease; }
+.shot img:hover { transform: scale(1.03); filter: brightness(1.08); }
+.shot-video { border-color: rgba(240, 198, 117, .55); box-shadow: 0 0 50px rgba(240, 198, 117, .18), 0 14px 40px rgba(0, 0, 0, .45); }
+@media (max-width: 700px) { .gallery { columns: 2; column-gap: 10px; } .shot { margin-bottom: 10px; border-radius: 12px; } }
+
+/* Foto ampliada */
+.lightbox { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; background: rgba(3, 4, 9, .94); padding: max(16px, env(safe-area-inset-top, 0px)) 16px max(16px, env(safe-area-inset-bottom, 0px)); }
+.lightbox[hidden] { display: none; }
+.lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 10px; box-shadow: 0 0 60px rgba(240, 198, 117, .15); }
+.lb-btn { position: absolute; width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--gold-soft); background: rgba(20, 8, 16, .85); color: var(--gold); font-size: 22px; cursor: pointer; display: grid; place-items: center; }
+.lb-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.lb-close { top: max(14px, env(safe-area-inset-top, 0px)); right: max(14px, env(safe-area-inset-right, 0px)); }
+.lb-prev { left: max(10px, env(safe-area-inset-left, 0px)); top: 50%; }
+.lb-next { right: max(10px, env(safe-area-inset-right, 0px)); top: 50%; }
+@media (max-width: 600px) { .lb-prev, .lb-next { top: auto; bottom: max(16px, env(safe-area-inset-bottom, 0px)); } }
 
 /* Carta fechada em envelope */
 .envelope-area { display: flex; flex-direction: column; align-items: center; gap: 16px; }

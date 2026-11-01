@@ -34,6 +34,10 @@ Por padrão, a música toca pelo player do YouTube (link em `js/music.js`, na li
 
 A música só toca depois do clique em **Acenda essa luz ♡**. Quem não estiver logado no Spotify no navegador ouve apenas um trecho de 30 segundos, por regra do próprio Spotify. Se o navegador pedir mais uma confirmação, aparece um aviso que leva até o player, onde basta apertar o play.
 
+## Fotos e vídeo
+
+Ficam na pasta `media/`. A galeria está na seção `id="momentos"` do `index.html`: para trocar uma foto, substitua o arquivo com o mesmo nome (por exemplo `media/foto-03.jpg`). O vídeo em loop é o `media/momento.mp4`.
+
 ## Como mudar os textos
 
 Todos os textos estão no `index.html`. As datas ficam na seção `id="datas"` e as frases principais nas seções `id="peak"` e `id="mensagem"`.

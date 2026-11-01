@@ -92,6 +92,32 @@
         </div>
       </section>
 
+      <!-- Galeria: fotos e um vídeo em loop no meio -->
+      <section class="block" id="momentos">
+        <div class="wrap wide">
+          <p class="eyebrow reveal">Pedaços do nosso caminho</p>
+          <h2 class="gal-title reveal">Os nossos momentos</h2>
+          <div class="gallery" id="gallery">
+          <figure class="shot reveal"><img src="media/foto-01.jpg" alt="Foto de mãe e filho, momento 1" loading="lazy"></figure>
+          <figure class="shot reveal"><img src="media/foto-02.jpg" alt="Foto de mãe e filho, momento 2" loading="lazy"></figure>
+          <figure class="shot reveal"><img src="media/foto-03.jpg" alt="Foto de mãe e filho, momento 3" loading="lazy"></figure>
+          <figure class="shot reveal"><img src="media/foto-04.jpg" alt="Foto de mãe e filho, momento 4" loading="lazy"></figure>
+          <figure class="shot reveal"><img src="media/foto-05.jpg" alt="Foto de mãe e filho, momento 5" loading="lazy"></figure>
+          <figure class="shot reveal"><img src="media/foto-06.jpg" alt="Foto de mãe e filho, momento 6" loading="lazy"></figure>
+          <figure class="shot reveal"><img src="media/foto-07.jpg" alt="Foto de mãe e filho, momento 7" loading="lazy"></figure>
+          <figure class="shot shot-video reveal"><video autoplay muted loop playsinline preload="auto" poster="media/momento.jpg" src="media/momento.mp4" aria-label="Vídeo em loop de um momento especial"></video></figure>
+          <figure class="shot reveal"><img src="media/foto-08.jpg" alt="Foto de mãe e filho, momento 8" loading="lazy"></figure>
+          <figure class="shot reveal"><img src="media/foto-09.jpg" alt="Foto de mãe e filho, momento 9" loading="lazy"></figure>
+          <figure class="shot reveal"><img src="media/foto-10.jpg" alt="Foto de mãe e filho, momento 10" loading="lazy"></figure>
+          <figure class="shot reveal"><img src="media/foto-11.jpg" alt="Foto de mãe e filho, momento 11" loading="lazy"></figure>
+          <figure class="shot reveal"><img src="media/foto-12.jpg" alt="Foto de mãe e filho, momento 12" loading="lazy"></figure>
+          <figure class="shot reveal"><img src="media/foto-13.jpg" alt="Foto de mãe e filho, momento 13" loading="lazy"></figure>
+          <figure class="shot reveal"><img src="media/foto-14.jpg" alt="Foto de mãe e filho, momento 14" loading="lazy"></figure>
+          <figure class="shot reveal"><img src="media/foto-15.jpg" alt="Foto de mãe e filho, momento 15" loading="lazy"></figure>
+          </div>
+        </div>
+      </section>
+
       <!-- A carta: fechada em um envelope, abre ao clicar -->
       <section class="block" id="carta">
         <div class="wrap">
@@ -142,6 +168,14 @@
         </div>
       </section>
     </main>
+  </div>
+
+  <!-- Foto ampliada -->
+  <div id="lightbox" class="lightbox" hidden role="dialog" aria-modal="true" aria-label="Foto ampliada">
+    <button class="lb-btn lb-close" id="lb-close" type="button" aria-label="Fechar">✕</button>
+    <button class="lb-btn lb-prev" id="lb-prev" type="button" aria-label="Foto anterior">‹</button>
+    <img id="lb-img" alt="">
+    <button class="lb-btn lb-next" id="lb-next" type="button" aria-label="Próxima foto">›</button>
   </div>
 
   <!-- Controles flutuantes da música -->
