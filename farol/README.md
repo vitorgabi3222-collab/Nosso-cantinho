@@ -25,6 +25,9 @@ Se o site já estiver publicado e você só quiser atualizar, envie os arquivos 
 
 ## Como colocar a música
 
+Por padrão, a música toca pelo player do YouTube (link em `js/music.js`, na linha `YOUTUBE_URL`). Para usar o Spotify no lugar, siga os passos abaixo: quando houver link do Spotify, ele tem prioridade.
+
+
 1. No Spotify, abra **93 Million Miles**, de Jason Mraz, clique em **Compartilhar → Copiar link da música**.
 2. Abra o arquivo `js/music.js` e cole o link entre as aspas da linha `const SPOTIFY_URL = '';`.
 3. Salve e publique de novo.

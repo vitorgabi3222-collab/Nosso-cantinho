@@ -188,6 +188,8 @@ body.transition #flash { animation: flash 3s ease forwards; }
 .music-title { margin: 0 0 24px; text-align: center; font-family: var(--font-display); font-weight: 500; font-style: italic; font-size: clamp(26px, 5vw, 38px); }
 .player { max-width: 520px; margin: 0 auto; border-radius: 16px; overflow: hidden; }
 .player iframe { display: block; width: 100%; border: 0; }
+.player.yt { aspect-ratio: 16 / 9; background: #000; }
+.player.yt iframe { height: 100%; }
 .player-fallback { text-align: center; padding: 26px 20px; border: 1px dashed var(--gold-soft); border-radius: 16px; background: rgba(6, 8, 16, .6); }
 .player-fallback p { margin: 0 0 14px; color: var(--muted); font-size: 15px; }
 .player-fallback a { color: var(--gold); border: 1px solid var(--gold-soft); border-radius: 999px; padding: 10px 22px; text-decoration: none; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }

@@ -1,7 +1,8 @@
 /* ==========================================================================
-   music.js  ·  Player oficial do Spotify
+   music.js  ·  Player incorporado (Spotify ou YouTube)
    A música só começa depois do clique em "Acenda essa luz". Nenhum arquivo de
-   áudio é usado: tudo passa pelo player incorporado do Spotify.
+   áudio é usado: tudo passa pelo player oficial incorporado.
+   Prioridade: Spotify (se houver link) e, senão, YouTube.
    API pública:  Music.play()  Music.toggle()  Music.isPlaying()  Music.onChange(fn)
    ========================================================================== */
 const Music = (function () {
@@ -11,6 +12,9 @@ const Music = (function () {
          Exemplo de formato: https://open.spotify.com/track/XXXXXXXXXXXXXXXXXXXXXX  */
   const SPOTIFY_URL = '';
 
+  /* Enquanto não houver link do Spotify, a música toca pelo player do YouTube. */
+  const YOUTUBE_URL = 'https://youtu.be/BYO0vnn874M';
+
   const box = document.getElementById('player');
   const SEARCH_URL = 'https://open.spotify.com/search/93%20Million%20Miles%20Jason%20Mraz';
   let ctrl = null, wantPlay = false, playing = false;
@@ -18,6 +22,7 @@ const Music = (function () {
   const emit = () => listeners.forEach((fn) => fn(playing));
 
   const m = SPOTIFY_URL.match(/\/(track|album|playlist|episode)\/([A-Za-z0-9]+)/);
+  const y = YOUTUBE_URL.match(/(?:youtu\.be\/|[?&]v=|embed\/)([\w-]{11})/);
 
   /* Sem link configurado: mostra um botão que abre a busca da música no Spotify */
   function showFallback() {
@@ -34,7 +39,25 @@ const Music = (function () {
     box.appendChild(f);
   }
 
-  if (!m) {
+  if (!m && y) {
+    /* ---------- YouTube ---------- */
+    box.classList.add('yt');
+    const mount = document.createElement('div'); box.appendChild(mount);
+    let yt = null;
+    window.onYouTubeIframeAPIReady = function () {
+      yt = new YT.Player(mount, {
+        width: '100%', height: '100%', videoId: y[1],
+        playerVars: { playsinline: 1, rel: 0, loop: 1, playlist: y[1] },
+        events: {
+          onReady: function () { ctrl = { play: function () { yt.playVideo(); }, togglePlay: function () { playing ? yt.pauseVideo() : yt.playVideo(); } }; if (wantPlay) yt.playVideo(); },
+          onStateChange: function (e) { const now = e.data === 1; if (now !== playing) { playing = now; emit(); } }
+        }
+      });
+    };
+    const sc = document.createElement('script');
+    sc.src = 'https://www.youtube.com/iframe_api'; sc.async = true;
+    document.body.appendChild(sc);
+  } else if (!m) {
     showFallback();
   } else {
     const kind = m[1], id = m[2];
