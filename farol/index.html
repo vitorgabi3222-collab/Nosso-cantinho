@@ -158,7 +158,10 @@
         <div class="wrap">
           <p class="eyebrow reveal">A trilha sonora</p>
           <h2 class="music-title reveal">93 Million Miles · Jason Mraz</h2>
-          <div class="player reveal" id="player" aria-label="Player do Spotify"></div>
+          <div class="player-wrap" id="player-wrap">
+            <button class="player-close" id="player-close" type="button" aria-label="Fechar o player">✕</button>
+            <div class="player" id="player" aria-label="Player de música"></div>
+          </div>
           <p class="closing reveal">Antes mesmo de eu conhecer o mundo, você já era a luz que um dia me mostraria o caminho.</p>
           <div class="divider reveal" aria-hidden="true">
             <svg class="flower"><use href="#flower"/></svg>
@@ -180,7 +183,6 @@
 
   <!-- Controles flutuantes da música -->
   <button id="music-toggle" class="music-toggle" type="button" aria-label="Pausar ou tocar a música">♪</button>
-  <button id="music-pill" class="music-pill" type="button" hidden>A música não começou? Toque aqui para abrir o player</button>
 
   <script src="js/sea.js"></script>
   <script src="js/tree.js"></script>

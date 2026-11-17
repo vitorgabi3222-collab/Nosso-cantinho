@@ -22,7 +22,7 @@
 html { background: var(--black); scroll-behavior: smooth; }
 body {
   margin: 0; color: var(--cream); font-family: var(--font-body); line-height: 1.7;
-  background: linear-gradient(180deg, #050b1a 0%, #170a1c 55%, #260a17 100%) fixed;
+  background: #03050d;   /* o céu estrelado é desenhado no canvas da cena 2 */
   padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px);
 }
 body.lock { overflow: hidden; }
@@ -208,7 +208,19 @@ body.transition #flash { animation: flash 3s ease forwards; }
 /* Música */
 .block-music { padding-bottom: 18vh; }
 .music-title { margin: 0 0 24px; text-align: center; font-family: var(--font-display); font-weight: 500; font-style: italic; font-size: clamp(26px, 5vw, 38px); }
-.player { max-width: 520px; margin: 0 auto; border-radius: 16px; overflow: hidden; }
+.player-wrap { position: relative; max-width: 520px; margin: 0 auto; }
+.player { border-radius: 16px; overflow: hidden; }
+.player-close { display: none; position: absolute; top: 4px; right: 6px; z-index: 2; width: 30px; height: 30px; border-radius: 50%; border: 0; background: transparent; color: var(--gold); font-size: 16px; cursor: pointer; place-items: center; }
+/* Player flutuante: aparece quando o navegador não deixa a música começar sozinha */
+.player-wrap.float {
+  position: fixed; z-index: 25; left: 50%; translate: -50% 0; width: min(340px, 92vw);
+  bottom: max(76px, calc(env(safe-area-inset-bottom, 0px) + 68px)); padding: 36px 8px 8px;
+  background: #0a0610; border: 1px solid var(--gold-soft); border-radius: 16px; box-shadow: 0 14px 50px rgba(0, 0, 0, .7);
+}
+.player-wrap.float::before { content: "Toque no play para ouvir a música"; position: absolute; top: 9px; left: 14px; right: 44px; font-size: 12px; letter-spacing: .04em; color: var(--gold); }
+.player-wrap.float .player-close { display: grid; }
+.player-wrap.float.failed::before { content: "Não foi possível tocar aqui"; }
+.player-wrap.float .player { border-radius: 10px; }
 .player iframe { display: block; width: 100%; border: 0; }
 .player.yt { aspect-ratio: 16 / 9; background: #000; }
 .player.yt iframe { height: 100%; }

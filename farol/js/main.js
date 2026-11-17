@@ -7,7 +7,7 @@
   const $ = (id) => document.getElementById(id);
   const body = document.body;
   const btn = $('light-btn'), scene1 = $('scene1'), scene2 = $('scene2');
-  const toggle = $('music-toggle'), pill = $('music-pill');
+  const toggle = $('music-toggle'), wrap = $('player-wrap');
   let started = false;
   body.classList.add('lock');   // a cena 1 ocupa a tela; a rolagem só libera depois do clique
 
@@ -42,24 +42,23 @@
 
   /* ---------- Controles da música ---------- */
   function setToggle() { toggle.textContent = Music.isPlaying() ? '❚❚' : '♪'; }
+  function showPlayer() { wrap.classList.add('float'); }     // player flutuante: basta apertar o play
+  function hidePlayer() { wrap.classList.remove('float'); }
   toggle.addEventListener('click', function () {
-    if (Music.hasController()) Music.toggle();
-    else $('player').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (Music.isPlaying() || !Music.hasController()) {
+      if (Music.hasController()) Music.toggle(); else showPlayer();
+      return;
+    }
+    Music.toggle();
+    setTimeout(function () { if (!Music.isPlaying()) showPlayer(); }, 1500);   // o navegador pode exigir o toque direto no play
   });
-  Music.onChange(function () { setToggle(); if (Music.isPlaying()) pill.hidden = true; });
+  $('player-close').addEventListener('click', hidePlayer);
+  Music.onChange(function () { setToggle(); if (Music.isPlaying()) hidePlayer(); });
 
-  /* Se o Spotify exigir mais uma confirmação, mostra o aviso que leva até o player */
+  /* Se o navegador não deixar a música começar sozinha, abre o player flutuante */
   function watchMusic() {
-    setTimeout(function () {
-      if (Music.isPlaying()) return;
-      pill.hidden = false;
-      setTimeout(function () { pill.hidden = true; }, 12000);   // some sozinho; o botão da música continua
-    }, 2500);
+    setTimeout(function () { if (!Music.isPlaying()) showPlayer(); }, 800);
   }
-  pill.addEventListener('click', function () {
-    pill.hidden = true;
-    $('player').scrollIntoView({ behavior: 'smooth', block: 'center' });
-  });
 
   /* ---------- Frase principal: cada palavra aparece em sequência ---------- */
   const peak = $('peak-text');

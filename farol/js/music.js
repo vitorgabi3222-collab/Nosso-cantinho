@@ -50,13 +50,23 @@ const Music = (function () {
         playerVars: { playsinline: 1, rel: 0, loop: 1, playlist: y[1] },
         events: {
           onReady: function () { ctrl = { play: function () { yt.playVideo(); }, togglePlay: function () { playing ? yt.pauseVideo() : yt.playVideo(); } }; if (wantPlay) yt.playVideo(); },
-          onStateChange: function (e) { const now = e.data === 1; if (now !== playing) { playing = now; emit(); } }
+          onStateChange: function (e) { const now = e.data === 1; if (now !== playing) { playing = now; emit(); } },
+          onError: function () { showYtLink(true); }   // vídeo que não permite ser incorporado
         }
       });
     };
     const sc = document.createElement('script');
     sc.src = 'https://www.youtube.com/iframe_api'; sc.async = true;
+    sc.onerror = showYtLink;
     document.body.appendChild(sc);
+    setTimeout(function () { if (!ctrl) showYtLink(); }, 9000);   // rede lenta ou bloqueio: oferece o link direto
+    function showYtLink(force) {
+      if (!force && (ctrl || box.querySelector('.player-fallback'))) return;
+      ctrl = null; playing = false;
+      const w = document.getElementById('player-wrap'); if (w) w.classList.add('failed');
+      box.classList.remove('yt');
+      box.innerHTML = '<div class="player-fallback"><p>Para ouvir a música, abra o vídeo no YouTube.</p><a href="' + YOUTUBE_URL + '" target="_blank" rel="noopener">Abrir no YouTube</a></div>';
+    }
   } else if (!m) {
     showFallback();
   } else {

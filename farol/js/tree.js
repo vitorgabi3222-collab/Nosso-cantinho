@@ -14,6 +14,7 @@ const Tree = (function () {
 
   let W = 0, H = 0, dpr = 1, t = 0, last = 0, raf = 0, running = false;
   let leaves = [], petals = [], flies = [], flowers = [], blades = [], stars = [];
+  let skyLayer = null, meteor = null;       // céu pronto (fundo + Via Láctea) e estrela cadente
   let trunkLayer = null;                     // galhos e tronco, desenhados uma vez
   let ground = 0, canopy = { cx: 0, cy: 0 }; // linha do chão e centro da copa
 
@@ -137,7 +138,14 @@ const Tree = (function () {
 
     // 6) vaga-lumes, estrelas, relva e flores
     flies = Array.from({ length: small ? 18 : 30 }, () => ({ x: Math.random() * W, y: H * (0.25 + Math.random() * 0.7), a: Math.random() * 6.283, v: 6 + Math.random() * 14, ph: Math.random() * 6.283 }));
-    stars = Array.from({ length: small ? 70 : 120 }, () => ({ x: Math.random() * W, y: Math.random() * H * 0.7, r: Math.random() * 1.2 + 0.2, p: Math.random() * 6.283 }));
+    skyLayer = document.createElement('canvas');
+    skyLayer.width = Math.round(W * dpr); skyLayer.height = Math.round(H * dpr);
+    paintSky();
+    const pick = () => { const k = Math.random(); return k < 0.7 ? '#ffffff' : (k < 0.85 ? '#bcd0ff' : '#ffe2b0'); };
+    stars = Array.from({ length: small ? 90 : 160 }, () => ({
+      x: Math.random() * W, y: Math.random() * ground * 0.9, r: 0.5 + Math.random() * 1.1,
+      p: Math.random() * 6.283, s: 0.6 + Math.random() * 1.4, c: pick(), flare: Math.random() < 0.07
+    }));
     blades = Array.from({ length: small ? 150 : 260 }, () => ({ x: Math.random() * W, h: 6 + Math.random() * 16, ph: Math.random() * 6.283 }));
     const fcols = ['#f6c8d4', '#ffe9ef', '#f08aa0', '#ffd9a0', '#ffffff'];
     flowers = Array.from({ length: small ? 12 : 18 }, () => {
@@ -164,17 +172,73 @@ const Tree = (function () {
   }
 
   /* ---------- Desenho ---------- */
-  function drawBackground() {
+  /* ---------- Céu estrelado ---------- */
+  /* Camada pronta, desenhada uma vez: azul-noite, Via Láctea e milhares de estrelas pequenas */
+  function paintSky() {
+    const r = rng(5), c = skyLayer.getContext('2d');
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const g = c.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#02040b'); g.addColorStop(0.6, '#050a1a'); g.addColorStop(1, '#0a1128');
+    c.fillStyle = g; c.fillRect(0, 0, W, H);
+
+    // Via Láctea: faixa diagonal de poeira clara com estrelas minúsculas
+    const x0 = -W * 0.1, y0 = H * 0.42, x1 = W * 1.1, y1 = H * 0.04, band = Math.max(W, H) * 0.12;
+    const ang = Math.atan2(y1 - y0, x1 - x0), nx = -Math.sin(ang), ny = Math.cos(ang);
+    const tints = ['120,140,230', '190,150,210', '110,170,220'];
+    for (let i = 0; i < 70; i++) {
+      const t = i / 69, cx = x0 + (x1 - x0) * t + (r() - 0.5) * band * 0.6, cy = y0 + (y1 - y0) * t + (r() - 0.5) * band * 0.6;
+      const rad = band * (0.7 + r() * 0.9), rg = c.createRadialGradient(cx, cy, 0, cx, cy, rad);
+      rg.addColorStop(0, 'rgba(' + tints[i % 3] + ',' + (0.035 + r() * 0.035) + ')'); rg.addColorStop(1, 'rgba(' + tints[i % 3] + ',0)');
+      c.fillStyle = rg; c.fillRect(cx - rad, cy - rad, rad * 2, rad * 2);
+    }
+    const dense = Math.min(1100, Math.round(W * H / 900));
+    for (let i = 0; i < dense; i++) {
+      const t = r() * 1.1 - 0.05, off = (r() + r() + r() - 1.5) * band * 0.9;
+      c.globalAlpha = 0.2 + r() * 0.55; c.fillStyle = r() < 0.2 ? '#cfe0ff' : '#ffffff';
+      c.beginPath(); c.arc(x0 + (x1 - x0) * t + nx * off, y0 + (y1 - y0) * t + ny * off, 0.25 + r() * 0.5, 0, 6.283); c.fill();
+    }
+    // estrelas espalhadas por todo o céu, em tons de branco, azul e dourado
+    const n = Math.round(W * H / 2300);
+    for (let i = 0; i < n; i++) {
+      const k = r();
+      c.globalAlpha = 0.3 + r() * 0.6; c.fillStyle = k < 0.7 ? '#ffffff' : (k < 0.85 ? '#bcd0ff' : '#ffe2b0');
+      c.beginPath(); c.arc(r() * W, r() * ground * 0.98, 0.25 + Math.pow(r(), 3) * 1.1, 0, 6.283); c.fill();
+    }
+    c.globalAlpha = 1;
+  }
+
+  function drawBackground(dt) {
+    ctx.drawImage(skyLayer, 0, 0, W, H);
+    // estrelas que piscam; algumas maiores, com brilho em cruz
     for (const s of stars) {
-      ctx.globalAlpha = (.3 + .6 * Math.abs(Math.sin(t * .5 + s.p))) * .75;
-      ctx.fillStyle = '#fff4f0'; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.283); ctx.fill();
+      const a = 0.25 + 0.75 * (0.5 + 0.5 * Math.sin(t * s.s + s.p));
+      ctx.globalAlpha = a; ctx.fillStyle = s.c;
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.283); ctx.fill();
+      if (s.flare) {
+        const L = 5 + s.r * 5;
+        ctx.strokeStyle = s.c; ctx.lineWidth = 0.7; ctx.globalAlpha = a * 0.55;
+        ctx.beginPath(); ctx.moveTo(s.x - L, s.y); ctx.lineTo(s.x + L, s.y); ctx.moveTo(s.x, s.y - L); ctx.lineTo(s.x, s.y + L); ctx.stroke();
+      }
     }
     ctx.globalAlpha = 1;
-    // iluminação dourada atrás da copa
+    // estrela cadente de vez em quando
+    if (!reduce) {
+      if (!meteor && Math.random() < 0.0012) meteor = { x: W * (0.35 + Math.random() * 0.6), y: Math.random() * H * 0.25, vx: -(520 + Math.random() * 260), vy: 230 + Math.random() * 120, life: 0 };
+      if (meteor) {
+        meteor.life += dt; meteor.x += meteor.vx * dt; meteor.y += meteor.vy * dt;
+        const sp = Math.hypot(meteor.vx, meteor.vy), a = Math.max(0, 1 - meteor.life / 1.1);
+        const tx = meteor.x - meteor.vx / sp * 120, ty = meteor.y - meteor.vy / sp * 120;
+        const g = ctx.createLinearGradient(meteor.x, meteor.y, tx, ty);
+        g.addColorStop(0, 'rgba(255,240,205,' + a + ')'); g.addColorStop(1, 'rgba(255,240,205,0)');
+        ctx.strokeStyle = g; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(meteor.x, meteor.y); ctx.lineTo(tx, ty); ctx.stroke();
+        if (meteor.life > 1.1) meteor = null;
+      }
+    }
+    // iluminação dourada suave atrás da copa
     const R = Math.max(W, H) * 0.62;
-    const g = ctx.createRadialGradient(canopy.cx, canopy.cy, 0, canopy.cx, canopy.cy, R);
-    g.addColorStop(0, 'rgba(240,190,100,.26)'); g.addColorStop(.45, 'rgba(150,40,70,.14)'); g.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    const g2 = ctx.createRadialGradient(canopy.cx, canopy.cy, 0, canopy.cx, canopy.cy, R);
+    g2.addColorStop(0, 'rgba(240,190,100,.17)'); g2.addColorStop(.45, 'rgba(150,40,70,.07)'); g2.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
   }
 
   function drawGround() {
@@ -256,7 +320,7 @@ const Tree = (function () {
     t += dt * (reduce ? 0.3 : 1);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
-    drawBackground();
+    drawBackground(dt);
     drawGround();
     ctx.drawImage(trunkLayer, 0, 0, W, H);
     drawLeaves();
